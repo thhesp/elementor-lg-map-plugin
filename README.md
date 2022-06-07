@@ -5,7 +5,7 @@
 4. API Key für Google Maps generieren und für JS Maps + Geocoding freischalten (ggf. URL einschränken auf die genutzte Domain)
 
 # Konfiguration
-1. CSV URL hinterlegen (sollte im Moment diese sein: https://ethercalc.letztegeneration.de/0k0kx8r450jc.csv)
+1. CSV URL hinterlegen
 2. API Key für Google Maps Anbindung hinterlegen
 
 # Weiterentwicklung
