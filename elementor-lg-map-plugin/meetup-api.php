@@ -54,7 +54,7 @@ final class MeetupBackendApi {
     }
 
     function loadCSV($csvUrl){
-        $data = file_get_contents($csvUrl);
+        $data = $this->restRequestCSV($csvUrl);
         $rows = explode("\n",$data);
 
         foreach($rows as $row) {
@@ -65,6 +65,31 @@ final class MeetupBackendApi {
             }
         }
 
+    }
+
+
+    function restRequestCSV($csvUrl){
+        $data = file_get_contents($csvUrl);
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_URL, $csvUrl);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $curl_response = curl_exec($curl);
+        if ($curl_response === false) {
+            $info = curl_getinfo($curl);
+            if (true === WP_DEBUG) {
+                error_log('Could not request CSV Data ' . curl_error($curl));
+            }
+            curl_close($curl);
+            return false;
+        }
+
+        curl_close($curl);
+
+
+        return $curl_response;
     }
 
     function prepareData($apikey){
