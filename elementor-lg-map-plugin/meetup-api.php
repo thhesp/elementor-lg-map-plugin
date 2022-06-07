@@ -38,6 +38,7 @@ final class MeetupBackendApi {
     public function __construct() {
         // Initialize the plugin.
         $this->meetupRoutes();
+        $this->init();
     }
 
     // API Routes
@@ -66,7 +67,6 @@ final class MeetupBackendApi {
         }
 
     }
-
 
     function restRequestCSV($csvUrl){
         $data = file_get_contents($csvUrl);
@@ -203,20 +203,16 @@ final class MeetupBackendApi {
         }
     }
 
-    function init(WP_REST_REQUEST $request) {
-        $apikey = $request['key'];
-        $csvUrl = $request['data'];
+    function init() {
+        $apikey = get_option( 'elementor-lg-map-plugin_settings' )['api_key'];
+        $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['csv_url'];
 
         $this->loadCSV($csvUrl);
         $this->prepareData($apikey);
     }
 
     // API Endpoints
-    function getAllMeetups(WP_REST_Request $request) {
-        if(!isset($this->original_meetups) || empty($this->original_meetups)){
-            $this->init($request);
-        }
-
+    function getAllMeetups() {
         $result = new WP_REST_Response($this->meetup_data, 200);
 
         // Set headers.
@@ -226,10 +222,6 @@ final class MeetupBackendApi {
     }
 
     function getOriginalData(WP_REST_Request $request) {
-        if(!isset($this->original_meetups) || empty($this->original_meetups)){
-            $this->init($request);
-        }
-
         $result = new WP_REST_Response($this->original_meetups, 200);
 
         // Set headers.

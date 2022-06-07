@@ -122,22 +122,6 @@ class LgMapPlugin extends Widget_Base {
 				'label' => __( 'Content', 'elementor-lg-map-plugin' ),
 			)
 		);
-		$this->add_control(
-			'url',
-			array(
-				'label'   => __( 'CSV URL to retrieve the data', 'elementor-lg-map-plugin' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => __( '', 'elementor-lg-map-plugin' ),
-			)
-		);
-                $this->add_control(
-			'apikey',
-			array(
-				'label'   => __( 'Google Maps API Key', 'elementor-lg-map-plugin' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => __( '', 'elementor-lg-map-plugin' ),
-			)
-		);
 		$this->end_controls_section();
 	}
 	/**
@@ -155,13 +139,9 @@ class LgMapPlugin extends Widget_Base {
               <div id="map"></div>
                 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>  
                 <script
-                  src="https://maps.googleapis.com/maps/api/js?key=<?php echo $settings['apikey'] ?>&callback=initMap&v=weekly"
+                  src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option( 'elementor-lg-map-plugin_settings' )['api_key']; ?>&callback=initMap&v=weekly"
                   defer
                 ></script>
-                <script>
-                		let apikey = '<?php echo $settings['apikey'] ?>';
-                		let dataLoc = '<?php echo $settings['url'] ?>'; 
-                </script>
     <?php
 	}
 	/**
@@ -178,13 +158,9 @@ class LgMapPlugin extends Widget_Base {
               <div id="map"></div>
                 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
                 <script
-                  src="https://maps.googleapis.com/maps/api/js?key={{{ settings.apikey }}}&callback=initMap&v=weekly"
+                  src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option( 'elementor-lg-map-plugin_settings' )['api_key']; ?>&callback=initMap&v=weekly"
                   defer
                 ></script>
-                <script>
-                		let apikey = '{{{ settings.apikey }}}';
-                		let dataLoc = '{{{ settings.url }}}'; 
-                </script>
     <?php
 	}
 }

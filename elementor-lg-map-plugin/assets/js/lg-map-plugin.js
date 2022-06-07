@@ -8,7 +8,7 @@ function initMap() {
   });
 
    async function getMeetups() {
-      let url = window.location.protocol.concat("//").concat(window.location.host).concat("/wp-json/meetup/v1/all?key=").concat(apikey).concat("&data=").concat(encodeURIComponent(dataLoc));
+      let url = window.location.protocol.concat("//").concat(window.location.host).concat("/wp-json/meetup/v1/all");
       let response = await fetch(url);
       let data = await response.json();
       return data;

@@ -18,3 +18,4 @@ define( 'ELEMENTOR_MAP_PLUGIN', __FILE__ );
  */
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'class-elementor-lg-map-plugin.php';
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'meetup-api.php';
+require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'settings.php';
