@@ -1,9 +1,7 @@
 function initBlockades(){
-    console.log('Loading blockades data');
      getBlockades().then(data => {
       console.log('Loaded blockages entries: ', data);
       for (let i = 0; i < data.length; i++) {
-        console.log("Adding: ", data[i]);
         // create a HTML element for each feature
         const el = document.createElement('div');
         el.className = getBlockadeClasses(data[i]);
@@ -24,8 +22,6 @@ function initBlockades(){
               )
           )
           .addTo(map);
-
-          console.log("finished with element");
       }
     });
 }
@@ -40,10 +36,10 @@ async function getBlockades() {
 function getLiveIcon(entry) {
    switch (entry.type) {
           case 'blockade':
-              return 'https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/blockade-icon.png';
+              return '/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.png';
             break;
           case 'gesa':
-              return 'https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/gesa-icon.png';
+              return '/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.png';
             break;
 
     } 

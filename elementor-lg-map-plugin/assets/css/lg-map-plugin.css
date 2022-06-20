@@ -13,32 +13,32 @@
     }
     
     .marker-vortrag {
-        background-image: url('https://letztegeneration.de/wp-content/uploads/2022/03/cropped-favicon-32x32.png');
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/cropped-favicon-32x32.png');
         z-index: 2;
     }
 
     .marker-blockade {
-        background-image: url('https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/blockade-icon.png');
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.png');
         z-index: 4;
     }
     .marker-gesa {
-        background-image: url('https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/gesa-icon.png');
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.png');
         z-index: 3;
     }
     .marker-knast {
-        background-image: url('https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/knast-icon.png');
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.png');
         z-index: 5;
     }
     .marker-soli {
-        background-image: url('https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/soli-icon.png');
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.png');
         z-index: 1;
     }
     .marker-farbaktion {
-        background-image: url('https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/farbaktion-icon.png');
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.png');
         z-index: 2;
     }
     .marker-scholz {
-        background-image: url('https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/scholz-icon.png');
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/scholz-icon.png');
         z-index: 2;
     }
     .marker-active{
@@ -83,7 +83,7 @@
         display:none;
     }
     .live-icon{
-        background-image: url('https://letztegeneration.de//wp-content/uploads/2022/01/live-icon.png'); 
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/live-icon.png'); 
         background-size: cover;
         display: inline-block;
         width: 4em; 
@@ -91,7 +91,7 @@
         text-align: center;
     }
     .pressebericht{
-        background-image: url('https://letztegeneration.de//wp-content/uploads/2022/01/pressebericht.png'); 
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/pressebericht.png'); 
         background-size: cover;
         display: inline-block;
         width: 3em; 

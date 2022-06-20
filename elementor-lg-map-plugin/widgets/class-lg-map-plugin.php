@@ -35,9 +35,9 @@ class LgMapPlugin extends Widget_Base {
 		parent::__construct( $data, $args );
 		wp_register_style( 'lg-map-plugin-css', plugins_url( '/assets/css/lg-map-plugin.css', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
 	
-    wp_register_script( 'lg-map-plugin-js', plugins_url( '/assets/js/lg-map-plugin.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
-    wp_register_script( 'lg-map-plugin-meetups-js', plugins_url( '/assets/js/lg-map-plugin-meetups.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
-    wp_register_script( 'lg-map-plugin-blockades-js', plugins_url( '/assets/js/lg-map-plugin-blockades.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
+	    wp_register_script( 'lg-map-plugin-js', plugins_url( '/assets/js/lg-map-plugin.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
+	    wp_register_script( 'lg-map-plugin-meetups-js', plugins_url( '/assets/js/lg-map-plugin-meetups.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
+	    wp_register_script( 'lg-map-plugin-blockades-js', plugins_url( '/assets/js/lg-map-plugin-blockades.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
   }
     
 	/**
@@ -166,11 +166,11 @@ class LgMapPlugin extends Widget_Base {
 								<div onclick="makeScrollable()" id='zoomOverlay' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
 								<div id='map' style='width:100%; height: 500px;'></div>
 								<div id="legende-map" class="legende-map">
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/blockade-icon.svg">Blockade<br/>
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/soli-icon.svg">Container-Aktion<br/>
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/farbaktion-icon.svg">Farbaktion<br/>
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/gesa-icon.svg">Gewahrsam<br/>
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/knast-icon.svg">Gefängnis<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg">Blockade<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg">Farbaktion<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg">Gewahrsam<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg">Gefängnis<br/>
 								</div>
 									<script>initMapboxMap();
 
@@ -208,11 +208,11 @@ class LgMapPlugin extends Widget_Base {
 								<div onclick="makeScrollable()" id='zoomOverlay' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
 								<div id='map' style='width:100%; height: 500px;'></div>
 								<div id="legende-map" class="legende-map">
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/blockade-icon.svg">Blockade<br/>
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/soli-icon.svg">Container-Aktion<br/>
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/farbaktion-icon.svg">Farbaktion<br/>
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/gesa-icon.svg">Gewahrsam<br/>
-									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/knast-icon.svg">Gefängnis<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg">Blockade<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg">Farbaktion<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg">Gewahrsam<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg">Gefängnis<br/>
 									</div>
 									<script>initMapboxMap();
 
