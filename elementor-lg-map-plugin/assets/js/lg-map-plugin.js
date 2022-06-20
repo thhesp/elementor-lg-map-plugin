@@ -1,12 +1,12 @@
-var map;
-
-function initMapboxMap() {
+function initMapboxMap(elementId) {
   mapboxgl.accessToken = 'pk.eyJ1IjoiY2xpbWF0ZS1nb256byIsImEiOiJja3RvMjk1Y2MwOGt5Mm5sZzNoeHVnMm45In0.goMBluE8qz03EeDMl4PElA';
-  map = new mapboxgl.Map({
-  container: 'map',
+  var lgMapPluginMap = new mapboxgl.Map({
+  container: elementId,
     style: 'mapbox://styles/climate-gonzo/ckyecnidz4x6314nuzz75453s'
   });
-  map.addControl(new mapboxgl.FullscreenControl());
+  lgMapPluginMap.addControl(new mapboxgl.FullscreenControl());
+
+  return lgMapPluginMap;
 }
 
 function makeScrollable() {

@@ -1,4 +1,4 @@
-function initBlockades(){
+function initBlockades(mapElement){
      getBlockades().then(data => {
       console.log('Loaded blockages entries: ', data);
       for (let i = 0; i < data.length; i++) {
@@ -21,7 +21,7 @@ function initBlockades(){
                 buildBlockadePopupHtml(data[i])
               )
           )
-          .addTo(map);
+          .addTo(mapElement);
       }
     });
 }

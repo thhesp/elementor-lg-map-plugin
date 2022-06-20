@@ -1,4 +1,4 @@
-function initMeetups(){
+function initMeetups(mapElement){
      getMeetups().then(data => {
       for (let i = 0; i < data.length; i++) {
         // create a HTML element for each feature
@@ -14,7 +14,7 @@ function initMeetups(){
                 buildMeetupHtml(data[i])
               )
           )
-          .addTo(map);
+          .addTo(mapElement);
       }
     });
 }

@@ -10,7 +10,7 @@
  * @license    https://opensource.org/licenses/GPL-3.0 GPL-3.0-only
  * @link       link(https://letztegeneration.de/vortraege/,
  *             Letzte Generation Vortraege)
- * @since      1.0.0
+ * @since      1.0.9
  * php version 7.3.9
  */
 if ( ! defined( 'ABSPATH' ) ) {
