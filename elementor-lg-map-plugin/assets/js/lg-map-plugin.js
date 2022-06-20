@@ -1,8 +1,8 @@
-let map;
+let vortraegeMap;
 
-function initMap() {
+function initVortraegeMap() {
 
-  map = new google.maps.Map(document.getElementById("map"), {
+  vortraegeMap = new google.maps.Map(document.getElementById("vortraege-map"), {
     zoom: 5,
     center: new google.maps.LatLng(51.165691, 10.451526),
   });
@@ -19,7 +19,7 @@ function initMap() {
       let marker = new google.maps.Marker({
         position: data[i].geodata,
         icon: "https://letztegeneration.de/wp-content/uploads/2022/03/cropped-favicon-32x32.png",
-        map: map,
+        map: vortraegeMap,
       });
 
       let html = buildHtml(data[i]);
@@ -29,7 +29,7 @@ function initMap() {
       });
 
       marker.addListener('click', function() {
-         information.open(map, marker);
+         information.open(vortraegeMap, marker);
       });
     }
   });
@@ -46,5 +46,5 @@ function initMap() {
   
 }
 
-window.initMap = initMap;
+window.initVortraegeMap = initVortraegeMap;
                 

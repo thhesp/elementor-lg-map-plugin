@@ -136,10 +136,10 @@ class LgMapPlugin extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		?>
-              <div id="map"></div>
+              <div id="vortraege-map"></div>
                 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>  
                 <script
-                  src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option( 'elementor-lg-map-plugin_settings' )['api_key']; ?>&callback=initMap&v=weekly"
+                  src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option( 'elementor-lg-map-plugin_settings' )['api_key']; ?>&callback=initVortraegeMap&v=weekly"
                   defer
                 ></script>
     <?php
@@ -155,10 +155,10 @@ class LgMapPlugin extends Widget_Base {
 	 */
 	protected function _content_template() {
 		?>
-              <div id="map"></div>
+              <div id="vortraege-map"></div>
                 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
                 <script
-                  src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option( 'elementor-lg-map-plugin_settings' )['api_key']; ?>&callback=initMap&v=weekly"
+                  src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option( 'elementor-lg-map-plugin_settings' )['api_key']; ?>&callback=initVortraegeMap&v=weekly"
                   defer
                 ></script>
     <?php
