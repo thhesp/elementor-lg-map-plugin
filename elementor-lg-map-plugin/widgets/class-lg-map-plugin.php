@@ -163,15 +163,21 @@ class LgMapPlugin extends Widget_Base {
 		?>
           	<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 			<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
-			<div onclick="makeScrollable()" id='zoomOverlay' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
+			<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
 			<div id='lg-map-plugin-map-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'></div>
-			<div id="legende-map" class="legende-map">
-				<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg">Blockade<br/>
-				<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
-				<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg">Farbaktion<br/>
-				<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg">Gewahrsam<br/>
-				<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg">Gefängnis<br/>
-			</div>
+
+					<?php
+						if ( 'yes' === $settings['load_blockades'] ) {
+								echo '<div id="legende-map" class="legende-map">
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg">Blockade<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg">Farbaktion<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg">Gewahrsam<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg">Gefängnis<br/>
+									</div>';
+						}
+					?>
+
 			<script>
 				jQuery( window ).on( 'load', () => {
 
@@ -208,15 +214,21 @@ class LgMapPlugin extends Widget_Base {
     		?>
               	<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 				<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
-				<div onclick="makeScrollable()" id='zoomOverlay' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
+				<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
 				<div id='lg-map-plugin-map-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'></div>
-				<div id="legende-map" class="legende-map">
-					<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg">Blockade<br/>
-					<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
-					<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg">Farbaktion<br/>
-					<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg">Gewahrsam<br/>
-					<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg">Gefängnis<br/>
-				</div>
+				<?php
+							if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_blockades'] ) {
+						
+								echo '
+									<div id="legende-map" class="legende-map">
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg">Blockade<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg">Farbaktion<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg">Gewahrsam<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg">Gefängnis<br/>
+									</div>';
+								}
+				?>
 				<script>
 					jQuery( window ).on( 'frontend/element_ready/global', () => {
 						var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>");

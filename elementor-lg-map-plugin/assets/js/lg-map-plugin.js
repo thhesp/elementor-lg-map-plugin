@@ -9,8 +9,8 @@ function initMapboxMap(elementId) {
   return lgMapPluginMap;
 }
 
-function makeScrollable() {
-  document.getElementById( 'zoomOverlay' ).style.display = 'none';
+function makeScrollable(elementId) {
+  document.getElementById( elementId ).style.display = 'none';
 }
 
 function toggleCheckboxPins(element) {

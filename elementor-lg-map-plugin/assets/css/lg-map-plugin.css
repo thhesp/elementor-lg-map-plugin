@@ -98,7 +98,7 @@
         height: 3em;
         text-align: center;
     }
-    #zoomOverlay{
+    .zoomOverlay{
         background: rgba(30,39,47,0.8);
         z-index: 100;
         position: absolute;
@@ -111,7 +111,7 @@
       cursor: pointer;
       color: #fff;
     }
-    #legende-map{
+    .legende-map{
         font-family: 'Futura-PT-Medium', Fantasy;
         position: absolute;
         top: 0px;
@@ -120,10 +120,10 @@
         color: #fff;
         background-image:linear-gradient(90deg, #1E272E 0%, rgba(0,0,0,0) 100%)
     }
-    #legende-map img{
+    .legende-map img{
         width: 3em;
     }
-    #legende-map input[type=checkbox]{
+    .legende-map input[type=checkbox]{
         margin-left: 0.5em;
     }
     .mapboxgl-ctrl-logo{
