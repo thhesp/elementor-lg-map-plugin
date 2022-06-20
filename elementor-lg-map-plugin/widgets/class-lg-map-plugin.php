@@ -172,21 +172,24 @@ class LgMapPlugin extends Widget_Base {
 				<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg">Gewahrsam<br/>
 				<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg">Gefängnis<br/>
 			</div>
-			<script>var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>");
+			<script>
+				jQuery( window ).on( 'load', () => {
 
-			<?php
-				if ( 'yes' === $settings['load_meetup'] ) {
-						echo 'initMeetups(map' .  $mapUniqueId . ');';
-				} 
-			?>
+					var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>");
+
+					<?php
+						if ( 'yes' === $settings['load_meetup'] ) {
+								echo 'initMeetups(map' .  $mapUniqueId . ');';
+						} 
+					?>
 
 
-			<?php
-				if ( 'yes' === $settings['load_blockades'] ) {
-						echo 'initBlockades(map' .  $mapUniqueId . ');';
-				}
-			?>
-
+					<?php
+						if ( 'yes' === $settings['load_blockades'] ) {
+								echo 'initBlockades(map' .  $mapUniqueId . ');';
+						}
+					?>
+				});
 			</script>
 									
     	<?php
