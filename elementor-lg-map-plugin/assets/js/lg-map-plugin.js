@@ -37,7 +37,7 @@ function initVortraegeMap() {
 
   function buildHtml(entry){
     let html = '<div class="map-popup"><b>' + entry.date + ' ' + entry.time + '</b>';
-    html += entry.lecturer ? ' Vortragender: ' + entry.lecturer  + '<br>': '<br>';
+    html += entry.lecturer ? ' Vortragende/-r: ' + entry.lecturer  + '<br>': '<br>';
     html += entry.location + ' in ' + entry.city + '</div>';
 
     return html;
