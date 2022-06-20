@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Main Elementor MaMeetupBackendApi
+ * Main Elementor MeetupBackendApi
  *
  */
 final class MeetupBackendApi {
@@ -205,7 +205,7 @@ final class MeetupBackendApi {
 
     function init() {
         $apikey = get_option( 'elementor-lg-map-plugin_settings' )['api_key'];
-        $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['csv_url'];
+        $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['meetups_url'];
 
         $this->loadCSV($csvUrl);
         $this->prepareData($apikey);
@@ -243,8 +243,8 @@ final class MeetupBackendApi {
   
 }
 
-add_action( 'rest_api_init', 'my_api_init' );
-function my_api_init() {
+add_action( 'rest_api_init', 'my_meetup_api_init' );
+function my_meetup_api_init() {
     MeetupBackendApi::get_instance();
 }
 

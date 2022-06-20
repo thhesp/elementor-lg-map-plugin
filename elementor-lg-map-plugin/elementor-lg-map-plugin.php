@@ -7,7 +7,7 @@
  * Plugin Name: Letzte Generation Vorträge Plugin
  * Description: Anzeigekarte für Letzte Generation Vorträge
  * Plugin URI:  https://letztegeneration.de/vortraege/
- * Version:     1.0.0
+ * Version:     1.0.9
  * Author:      THS
  * Author URI:  https://letztegeneration.de/
  * Text Domain: elementor-lg-meetup-map
@@ -18,4 +18,5 @@ define( 'ELEMENTOR_MAP_PLUGIN', __FILE__ );
  */
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'class-elementor-lg-map-plugin.php';
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'meetup-api.php';
+require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'blockades-api.php';
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'settings.php';

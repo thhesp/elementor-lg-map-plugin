@@ -44,7 +44,7 @@ final class MeetupSettings {
 
 
     function addSettingsPage() {
-        add_options_page( 'Letzte Generation Vorträge', 'LG Vorträge Einstellungen', 'manage_options', 'elementor-lg-map-plugin_settings_page', array ($this, 'renderPluginSettings') );
+        add_options_page( 'Letzte Generation Custom Karten', 'LG Custom Karten Einstellungen', 'manage_options', 'elementor-lg-map-plugin_settings_page', array ($this, 'renderPluginSettings') );
     }
 
     function renderPluginSettings(){
@@ -82,8 +82,9 @@ final class MeetupSettings {
         register_setting( 'elementor-lg-map-plugin_settings', 'elementor-lg-map-plugin_settings');
         add_settings_section( 'lg_meetup_settings', 'Konfiguration', array($this, 'configTextRender'), 'elementor-lg-map-plugin' );
 
-        add_settings_field( 'elementor-lg-map-plugin_api_key', 'API Key', array($this, 'apiKeyRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
-        add_settings_field( 'elementor-lg-map-plugin_csv_url', 'CSV URL', array($this, 'csvUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_api_key', 'Google API Key', array($this, 'apiKeyRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_meetups_url', 'Vortraege URL', array($this, 'meetupsUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_blockades_url', 'Blockaden URL', array($this, 'blockadesUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
     }
 
     function configTextRender(){
@@ -95,9 +96,14 @@ final class MeetupSettings {
         echo "<input id='elementor-lg-map-plugin_settings_api_key' name='elementor-lg-map-plugin_settings[api_key]' type='text' value='" . esc_attr( $options['api_key'] ) . "' />";
     }
     
-    function csvUrlRender(){
+    function meetupsUrlRender(){
         $options = get_option( 'elementor-lg-map-plugin_settings' );
-        echo "<input id='elementor-lg-map-plugin_settings_csv_url' name='elementor-lg-map-plugin_settings[csv_url]' type='text' value='" . esc_attr( $options['csv_url'] ) . "' />";
+        echo "<input id='elementor-lg-map-plugin_settings_meetups_url' name='elementor-lg-map-plugin_settings[meetups_url]' type='text' value='" . esc_attr( $options['meetups_url'] ) . "' />";
+    }
+
+    function blockadesUrlRender(){
+        $options = get_option( 'elementor-lg-map-plugin_settings' );
+        echo "<input id='elementor-lg-map-plugin_settings_blockades_url' name='elementor-lg-map-plugin_settings[blockades_url]' type='text' value='" . esc_attr( $options['blockades_url'] ) . "' />";
     }
 
     public static function get_instance() {

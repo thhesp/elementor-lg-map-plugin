@@ -1,50 +1,74 @@
-let vortraegeMap;
+var map;
 
-function initVortraegeMap() {
-
-  vortraegeMap = new google.maps.Map(document.getElementById("vortraege-map"), {
-    zoom: 5,
-    center: new google.maps.LatLng(51.165691, 10.451526),
+function initMapboxMap() {
+  mapboxgl.accessToken = 'pk.eyJ1IjoiY2xpbWF0ZS1nb256byIsImEiOiJja3RvMjk1Y2MwOGt5Mm5sZzNoeHVnMm45In0.goMBluE8qz03EeDMl4PElA';
+  map = new mapboxgl.Map({
+  container: 'map',
+    style: 'mapbox://styles/climate-gonzo/ckyecnidz4x6314nuzz75453s'
   });
-
-   async function getMeetups() {
-      let url = window.location.protocol.concat("//").concat(window.location.host).concat("/wp-json/meetup/v1/all");
-      let response = await fetch(url);
-      let data = await response.json();
-      return data;
-   }
-
-   getMeetups().then(data => {
-    for (let i = 0; i < data.length; i++) {
-      let marker = new google.maps.Marker({
-        position: data[i].geodata,
-        icon: "https://letztegeneration.de/wp-content/uploads/2022/03/cropped-favicon-32x32.png",
-        map: vortraegeMap,
-      });
-
-      let html = buildHtml(data[i]);
-
-      let information = new google.maps.InfoWindow({
-         content: html
-      });
-
-      marker.addListener('click', function() {
-         information.open(vortraegeMap, marker);
-      });
-    }
-  });
-  
-
-  function buildHtml(entry){
-    let html = '<div class="map-popup"><b>' + entry.date + ' ' + entry.time + '</b>';
-    html += entry.lecturer ? ' Vortragende/-r: ' + entry.lecturer  + '<br>': '<br>';
-    html += entry.location + ' in ' + entry.city + '</div>';
-
-    return html;
-  }
-
-  
+  map.addControl(new mapboxgl.FullscreenControl());
 }
 
-window.initVortraegeMap = initVortraegeMap;
-                
+function makeScrollable() {
+  document.getElementById( 'zoomOverlay' ).style.display = 'none';
+}
+
+function toggleCheckboxPins(element) {
+    if(element.checked){
+        switch (element.id) {
+          case 'blockade':
+            jQuery(".blockadeP").each(function() {
+                jQuery(this).removeClass("marker-display-none");
+            });
+            break;
+          case 'soli':
+            jQuery(".soliP").each(function() {
+                jQuery(this).removeClass("marker-display-none");
+            });
+            break;
+          case 'farbe':
+            jQuery(".farbeP").each(function() {
+                jQuery(this).removeClass("marker-display-none");
+            });
+            break;
+          case 'gesa':
+            jQuery(".gesaP").each(function() {
+                jQuery(this).removeClass("marker-display-none");
+            });
+            break;
+          case 'knast':
+            jQuery(".knastP").each(function() {
+                jQuery(this).removeClass("marker-display-none");
+            }); 
+            break;
+        } 
+    } else {
+       switch (element.id) {
+          case 'blockade':
+           jQuery(".blockadeP").each(function() {
+                jQuery(this).addClass("marker-display-none");
+            });
+            break;
+          case 'soli':
+            jQuery(".soliP").each(function() {
+                jQuery(this).addClass("marker-display-none");
+            });
+            break;
+          case 'farbe':
+            jQuery(".farbeP").each(function() {
+                jQuery(this).addClass("marker-display-none");
+            });
+            break;
+          case 'gesa':
+            jQuery(".gesaP").each(function() {
+                jQuery(this).addClass("marker-display-none");
+            }); 
+            break;
+          case 'knast':
+            jQuery(".knastP").each(function() {
+                jQuery(this).addClass("marker-display-none");
+            });
+            break;
+        } 
+    }
+}

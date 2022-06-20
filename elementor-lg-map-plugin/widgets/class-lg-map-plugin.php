@@ -36,6 +36,8 @@ class LgMapPlugin extends Widget_Base {
 		wp_register_style( 'lg-map-plugin-css', plugins_url( '/assets/css/lg-map-plugin.css', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
 	
     wp_register_script( 'lg-map-plugin-js', plugins_url( '/assets/js/lg-map-plugin.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
+    wp_register_script( 'lg-map-plugin-meetups-js', plugins_url( '/assets/js/lg-map-plugin-meetups.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
+    wp_register_script( 'lg-map-plugin-blockades-js', plugins_url( '/assets/js/lg-map-plugin-blockades.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.0.0' );
   }
     
 	/**
@@ -103,7 +105,7 @@ class LgMapPlugin extends Widget_Base {
 	 * Enqueue scripts.
 	 */
 	public function get_script_depends() {
-		return array( 'lg-map-plugin-js' );
+		return array( 'lg-map-plugin-js', 'lg-map-plugin-meetups-js', 'lg-map-plugin-blockades-js');
 	}
         
 	/**
@@ -122,6 +124,28 @@ class LgMapPlugin extends Widget_Base {
 				'label' => __( 'Content', 'elementor-lg-map-plugin' ),
 			)
 		);
+		$this->add_control(
+			'load_meetup',
+			array(
+				'label'   => __( 'Vorträge anzeigen', 'elementor-lg-map-plugin' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'label_on' => esc_html__( 'Show', 'elementor-lg-map-plugin' ),
+				'label_off' => esc_html__( 'Hide', 'elementor-lg-map-plugin' ),
+				'return_value' => 'yes',
+				'default' => 'yes',
+			)
+		);
+		$this->add_control(
+			'load_blockades',
+			array(
+				'label'   => __( 'Blockaden anzeigen', 'elementor-lg-map-plugin' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'label_on' => esc_html__( 'Show', 'elementor-lg-map-plugin' ),
+				'label_off' => esc_html__( 'Hide', 'elementor-lg-map-plugin' ),
+				'return_value' => 'yes',
+				'default' => 'yes',
+			)
+		);
 		$this->end_controls_section();
 	}
 	/**
@@ -137,11 +161,34 @@ class LgMapPlugin extends Widget_Base {
 		$settings = $this->get_settings_for_display();
 		?>
               <div id="vortraege-map"></div>
-                <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>  
-                <script
-                  src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option( 'elementor-lg-map-plugin_settings' )['api_key']; ?>&callback=initVortraegeMap&v=weekly"
-                  defer
-                ></script>
+              	<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+								<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+								<div onclick="makeScrollable()" id='zoomOverlay' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
+								<div id='map' style='width:100%; height: 500px;'></div>
+								<div id="legende-map" class="legende-map">
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/blockade-icon.svg">Blockade<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/soli-icon.svg">Container-Aktion<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/farbaktion-icon.svg">Farbaktion<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/gesa-icon.svg">Gewahrsam<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/knast-icon.svg">Gefängnis<br/>
+								</div>
+									<script>initMapboxMap();
+
+									<?php
+										if ( 'yes' === $settings['load_meetup'] ) {
+												echo 'initMeetups();';
+										} 
+									?>
+
+
+									<?php
+										if ( 'yes' === $settings['load_blockades'] ) {
+												echo 'initBlockades();';
+										}
+									?>
+
+									</script>
+									
     <?php
 	}
 	/**
@@ -154,13 +201,36 @@ class LgMapPlugin extends Widget_Base {
 	 * @access protected
 	 */
 	protected function _content_template() {
-		?>
+    		?>
               <div id="vortraege-map"></div>
-                <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-                <script
-                  src="https://maps.googleapis.com/maps/api/js?key=<?php echo get_option( 'elementor-lg-map-plugin_settings' )['api_key']; ?>&callback=initVortraegeMap&v=weekly"
-                  defer
-                ></script>
+              	<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+								<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+								<div onclick="makeScrollable()" id='zoomOverlay' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
+								<div id='map' style='width:100%; height: 500px;'></div>
+								<div id="legende-map" class="legende-map">
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/blockade-icon.svg">Blockade<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/soli-icon.svg">Container-Aktion<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/farbaktion-icon.svg">Farbaktion<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/gesa-icon.svg">Gewahrsam<br/>
+									<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="https://letztegeneration.de/wp-content/themes/sydney-child/mapbox/icons/knast-icon.svg">Gefängnis<br/>
+									</div>
+									<script>initMapboxMap();
+
+									<?php
+										if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_meetup'] ) {
+												echo 'initMeetups();';
+										}
+									?>
+
+
+									<?php
+										if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_blockades'] ) {
+												echo 'initBlockades();';
+										}
+									?>
+
+									</script>
+									
     <?php
 	}
 }
