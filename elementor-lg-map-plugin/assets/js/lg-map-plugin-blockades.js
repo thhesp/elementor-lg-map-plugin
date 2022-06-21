@@ -6,6 +6,8 @@ function initBlockades(mapElement){
         el.className = getBlockadeClasses(data[i]);
 
         if(data[i].live){
+          el.className += " marker-active"
+
           const iconimg = document.createElement('img');
           iconimg.src = getLiveIcon(data[i]);
           el.appendChild(iconimg);
