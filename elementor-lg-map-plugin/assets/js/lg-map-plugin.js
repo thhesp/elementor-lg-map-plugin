@@ -14,30 +14,34 @@ function makeScrollable(elementId) {
 }
 
 function toggleCheckboxPins(element) {
+    var mapId = jQuery(element).attr("legend-for");
+
+    console.log("toggling for element ", mapId);
+
     if(element.checked){
         switch (element.id) {
           case 'blockade':
-            jQuery(".blockadeP").each(function() {
+            jQuery("#" + mapId + " .blockadeP").each(function() {
                 jQuery(this).removeClass("marker-display-none");
             });
             break;
           case 'soli':
-            jQuery(".soliP").each(function() {
+            jQuery("#" + mapId + " .soliP").each(function() {
                 jQuery(this).removeClass("marker-display-none");
             });
             break;
           case 'farbe':
-            jQuery(".farbeP").each(function() {
+            jQuery("#" + mapId + " .farbeP").each(function() {
                 jQuery(this).removeClass("marker-display-none");
             });
             break;
           case 'gesa':
-            jQuery(".gesaP").each(function() {
+            jQuery("#" + mapId + " .gesaP").each(function() {
                 jQuery(this).removeClass("marker-display-none");
             });
             break;
           case 'knast':
-            jQuery(".knastP").each(function() {
+            jQuery("#" + mapId + " .knastP").each(function() {
                 jQuery(this).removeClass("marker-display-none");
             }); 
             break;
@@ -45,27 +49,27 @@ function toggleCheckboxPins(element) {
     } else {
        switch (element.id) {
           case 'blockade':
-           jQuery(".blockadeP").each(function() {
+           jQuery("#" + mapId + " .blockadeP").each(function() {
                 jQuery(this).addClass("marker-display-none");
             });
             break;
           case 'soli':
-            jQuery(".soliP").each(function() {
+            jQuery("#" + mapId + " .soliP").each(function() {
                 jQuery(this).addClass("marker-display-none");
             });
             break;
           case 'farbe':
-            jQuery(".farbeP").each(function() {
+            jQuery("#" + mapId + " .farbeP").each(function() {
                 jQuery(this).addClass("marker-display-none");
             });
             break;
           case 'gesa':
-            jQuery(".gesaP").each(function() {
+            jQuery("#" + mapId + " .gesaP").each(function() {
                 jQuery(this).addClass("marker-display-none");
             }); 
             break;
           case 'knast':
-            jQuery(".knastP").each(function() {
+            jQuery("#" + mapId + " .knastP").each(function() {
                 jQuery(this).addClass("marker-display-none");
             });
             break;

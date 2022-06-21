@@ -168,12 +168,14 @@ class LgMapPlugin extends Widget_Base {
 
 					<?php
 						if ( 'yes' === $settings['load_blockades'] ) {
-								echo '<div id="legende-map" class="legende-map">
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg">Blockade<br/>
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg">Farbaktion<br/>
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg">Gewahrsam<br/>
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg">Gefängnis<br/>
+						
+								echo '
+									<div class="legende-map" >
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg" >Blockade<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg" >Farbaktion<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg" >Gewahrsam<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg" >Gefängnis<br/>
 									</div>';
 						}
 					?>
@@ -220,12 +222,12 @@ class LgMapPlugin extends Widget_Base {
 							if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_blockades'] ) {
 						
 								echo '
-									<div id="legende-map" class="legende-map">
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg">Blockade<br/>
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg">Farbaktion<br/>
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg">Gewahrsam<br/>
-										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg">Gefängnis<br/>
+									<div class="legende-map" >
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg" >Blockade<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="soli" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/soli-icon.svg">Container-Aktion<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="farbe" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/farbaktion-icon.svg" >Farbaktion<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="gesa" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.svg" >Gewahrsam<br/>
+										<input type="checkbox" onchange="toggleCheckboxPins(this)" id="knast" legend-for="lg-map-plugin-map-'.$mapUniqueId.'" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/knast-icon.svg" >Gefängnis<br/>
 									</div>';
 								}
 				?>
