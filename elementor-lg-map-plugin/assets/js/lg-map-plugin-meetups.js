@@ -16,6 +16,8 @@ function initMeetups(mapElement){
           )
           .addTo(mapElement);
       }
+
+      buildLegendForMap(mapElement);
     });
 }
 

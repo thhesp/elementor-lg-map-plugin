@@ -7,7 +7,7 @@
  * Plugin Name: Letzte Generation Vorträge Plugin
  * Description: Anzeigekarte für Letzte Generation Vorträge
  * Plugin URI:  https://letztegeneration.de/vortraege/
- * Version:     1.0.9
+ * Version:     1.1.0
  * Author:      THS
  * Author URI:  https://letztegeneration.de/
  * Text Domain: elementor-lg-meetup-map

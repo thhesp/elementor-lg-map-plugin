@@ -1,6 +1,5 @@
 function initBlockades(mapElement){
      getBlockades().then(data => {
-      console.log('Loaded blockages entries: ', data);
       for (let i = 0; i < data.length; i++) {
         // create a HTML element for each feature
         const el = document.createElement('div');
@@ -23,6 +22,8 @@ function initBlockades(mapElement){
           )
           .addTo(mapElement);
       }
+
+      buildLegendForMap(mapElement);
     });
 }
 
@@ -43,7 +44,7 @@ function getLiveIcon(entry) {
             break;
 
     } 
-        console.log("Found not live icon");
+        console.log("Found no live icon");
 }
 
 function getBlockadeClasses(entry) {
@@ -64,7 +65,7 @@ function getBlockadeClasses(entry) {
               return 'marker marker-knast knastP';
             break;
     } 
-        console.log("Found not blockade class");
+        console.log("Found no blockade class");
 }
 
 function buildBlockadePopupHtml(entry) {
