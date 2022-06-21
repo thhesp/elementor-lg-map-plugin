@@ -64,7 +64,7 @@ function getBlockadeClasses(entry) {
               return 'marker marker-knast knastP';
             break;
     } 
-        console.log("Found not blockage class");
+        console.log("Found not blockade class");
 }
 
 function buildBlockadePopupHtml(entry) {

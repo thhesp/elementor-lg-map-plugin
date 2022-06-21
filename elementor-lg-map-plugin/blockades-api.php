@@ -55,12 +55,18 @@ final class BlockadesBackendApi {
     }
 
     function loadCSV($csvUrl){
-        $data = $this->restRequestCSV($csvUrl);
+        $data = $this->restRequest($csvUrl);
         $rows = explode("\n",$data);
 
         foreach($rows as $row) {
-            //skip empty lines
             $trimmedRow = trim($row);
+            //skip columns row
+            if(str_starts_with($trimmedRow, "type,live,")){
+                continue;
+            }
+
+
+            //skip empty lines
             if(strlen($trimmedRow) > 0){
                 $this->original_blockades[] = str_getcsv($trimmedRow);
             }
@@ -68,11 +74,11 @@ final class BlockadesBackendApi {
 
     }
 
-    function restRequestCSV($csvUrl){
-        $data = file_get_contents($csvUrl);
+    function restRequest($url){
+        $data = file_get_contents($url);
         $curl = curl_init();
 
-        curl_setopt($curl, CURLOPT_URL, $csvUrl);
+        curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
@@ -80,7 +86,7 @@ final class BlockadesBackendApi {
         if ($curl_response === false) {
             $info = curl_getinfo($curl);
             if (true === WP_DEBUG) {
-                error_log('Could not request CSV Data ' . curl_error($curl));
+                error_log('Could not request Data ' . curl_error($curl));
             }
             curl_close($curl);
             return false;
@@ -92,35 +98,46 @@ final class BlockadesBackendApi {
         return $curl_response;
     }
 
-    function prepareData($apikey){
+    function prepareData(){
 
         foreach($this->original_blockades as $row){
-            $this->blockades_data[] = $this->buildApiData($row);
+            $this->blockades_data[] = $this->buildApiData($row,);
         }
     }
 
+
     function buildApiData($entry){
-        return array(
-                 'type' => 'farbe',
-                 'live' => false,
-                 'title' => 'Kanzleramt',
-                 'description' => '<a target="_blank" href="https://goo.gl/maps/FiE6225d8RkW8Q5S8" style="color: #EE2F04" target="_blank">Willy-Brandt-Straße 1, Berlin</a><br>14.12.21 - Bundeskanzleramt-Fassade mit Forderungen bemalt<br>5 Gewahrsamnahmen.',
-                 'pressebericht' => 'https://www.tagesspiegel.de/politik/gruppe-will-gesetz-gegen-lebensmittelverschwendung-klimaaktivisten-pinseln-forderungen-ans-kanzleramt/27892498.html',
-                 'livestream' => '',
-                 'geodata' => array(
-                     'lat' => 13.369593489186151,
-                     'lng' => 52.52017164399691
-                 )
-             );
+        $element = array(
+            'type' => $entry[0],
+            'live' => $this->isLive($entry[1]),
+            'title' => $entry[2],
+            'description' => $entry[3]
+        );
+
+        if($entry[6]){
+            $element['pressebericht'] = $entry[5];
+        }
+
+        if($entry[7]){
+            $element['livestream'] = $entry[6];
+        }
+
+        $element['geodata']['lat'] = floatval(trim(explode(',', $entry[4], )[1]));
+        $element['geodata']['lng'] = floatval(trim(explode(',', $entry[4])[0]));
+
+        return $element;
+    }
+
+    function isLive($liveString){
+        return $liveString && $liveString == 'Ja';
+
     }
 
     function init() {
-        $apikey = get_option( 'elementor-lg-map-plugin_settings' )['api_key'];
         $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['blockades_url'];
 
         $this->loadCSV($csvUrl);
-        //$this->prepareData($apikey);
-        $this->createTestData();
+        $this->prepareData();
     }
 
     // API Endpoints
@@ -149,82 +166,6 @@ final class BlockadesBackendApi {
         }
 
         return static::$instance;
-    }
-
-   
-       function createTestData(){
-        $this->blockades_data[] = array(
-                 'type' => 'farbe',
-                 'live' => false,
-                 'title' => 'Kanzleramt',
-                 'description' => '<a target="_blank" href="https://goo.gl/maps/FiE6225d8RkW8Q5S8" style="color: #EE2F04" target="_blank">Willy-Brandt-Straße 1, Berlin</a><br>14.12.21 - Bundeskanzleramt-Fassade mit Forderungen bemalt<br>5 Gewahrsamnahmen.',
-                 'pressebericht' => 'https://www.tagesspiegel.de/politik/gruppe-will-gesetz-gegen-lebensmittelverschwendung-klimaaktivisten-pinseln-forderungen-ans-kanzleramt/27892498.html',
-                 'geodata' => array(
-                     'lat' => 52.52017164399691,
-                     'lng' => 13.369593489186151
-                 )
-             );
-
-
-        $this->blockades_data[] = array(
-                 'type' => 'blockade',
-                 'live' => false,
-                 'title' => 'A114 Blockade',
-                 'description' => '<a href="goo.gl/maps/QJiesdzKeCf8XcES6" target="_blank" style="color: #EE2F04">A114 durch Blockade an der Kreuzung B109 mit Granitzstraße</a><br><b>24.01.:</b> 13 Bürger:innen blockieren.<br><b>26.01.:</b> 14 Bürger:innen blockieren.<br><b>28.01.:</b> 5 Bürger:innen blockieren zum vierten Mal.',
-                 'geodata' => array(
-                     'lat' => 52.57214688666855,
-                     'lng' => 13.428687620761622
-                 )
-             );
-
-
-        $this->blockades_data[] = array(
-                 'type' => 'blockade',
-                 'live' => false,
-                 'title' => 'Flughafen Berlin',
-                 'description' => '<a href="https://goo.gl/maps/2Wj784NYM9RvidGv8" target="_blank" style="color: #EE2F04">Hugo-Junkers-Ring unter Melli-Beese-Ring bei der Vereinigung der 3 Spuren zwischen Parkhäusern P7 und P8</a><br><b>23.02.:</b> 4 Bürger:innen blockieren.',
-                 'geodata' => array(
-                     'lat' => 52.366775,
-                     'lng' => 13.511816
-                 )
-             );
-
-
-        $this->blockades_data[] = array(
-                 'type' => 'gesa',
-                 'live' => false,
-                 'title' => 'Gesa City',
-                 'description' => '<a href="https://goo.gl/maps/tDuWZ6oxnYURSTQf9" target="_blank" style="color: #EE2F04">Polizei, Perleberger Str. 61A, Berlin</a><br><u>Gewahrsamnahmen nach Aktion</u><br>Essen Retten Berlin: 1 Bürgerin<br/>A114 (28.01.): 5 Bürger:innen<br><b>Aktiv: 0</b>',
-                 'geodata' => array(
-                     'lat' => 52.53361809370352,
-                     'lng' => 13.353269788904822
-                 )
-             );
-
-
-        $this->blockades_data[] = array(
-                 'type' => 'gesa',
-                 'live' => true,
-                 'title' => 'Gesa Zentrale',
-                 'description' => '<a href="https://goo.gl/maps/VeiQS1XiGgwhsL8i7" target="_blank" style="color: #EE2F04">LKA, Tempelhofer Damm 12, Berlin</a><br><u>Gewahrsamnahmen nach Aktion</u><br><b>Aktiv: 3<br>Insg.: 107</b><br>Kanzleramt: 5 Bürgerinnen<br/>A103,A114 24.1.: 24 Personen<br/>A103,A114 26.1.: 15 Personen<br/>A100: Seestr.,Beusselstr. 31.1.: 17 Pers.<br/>A100: Beusselstr. 4.2.: 5 Pers.<br/>A100: Spandauer Damm, Kurfürstendamm,Messedamm 7.2.: 20 Pers.<br/>A100 Tempelhofer Damm, Alboinstr.,Sachsendamm 8.2.: 13 Pers.<br/>A100/Tegeler Weg 9.2.: 8 Pers.',
-                 'livestream' => 'Teststream',
-                 'geodata' => array(
-                     'lat' => 52.48230798703001,
-                     'lng' => 13.385333698413097
-                 )
-            );
-
-        $this->blockades_data[] = array(
-                 'type' => 'soli',
-                 'live' => false,
-                 'title' => 'Essen retten',
-                 'description' => '23.1.22 - Bürger:innen verschenken in Bayreuth containertes Essen im Rahmen des Aufstands der Letzten Generation.',
-                 'pressebericht' => 'https://www.wiesentbote.de/2022/01/22/aktion-in-bayreuth-ziviler-widerstand-gegen-staatlich-tolerierte-lebensmittelverschwendung/',
-                 'geodata' => array(
-                     'lat' => 49.94386295584918,
-                     'lng' => 11.575303298312033
-                 )
-            );
     }
   
 }
