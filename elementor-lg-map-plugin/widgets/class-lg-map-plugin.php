@@ -158,6 +158,7 @@ class LgMapPlugin extends Widget_Base {
 	 * @access protected
 	 */
 	protected function render() {
+			$mapboxKey = get_option( 'elementor-lg-map-plugin_settings' )['mapbox_key'];
 			$settings = $this->get_settings_for_display();
 			$mapUniqueId =  uniqid();
 		?>
@@ -169,7 +170,7 @@ class LgMapPlugin extends Widget_Base {
 			<script>
 				jQuery( window ).on( 'load', () => {
 
-					var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>");
+					var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>");
 
 					<?php
 						if ( 'yes' === $settings['load_meetup'] ) {
@@ -198,6 +199,7 @@ class LgMapPlugin extends Widget_Base {
 	 * @access protected
 	 */
 	protected function _content_template() {
+				$mapboxKey = get_option( 'elementor-lg-map-plugin_settings' )['mapbox_key'];
 				$mapUniqueId =  uniqid();
     		?>
               	<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
@@ -207,7 +209,7 @@ class LgMapPlugin extends Widget_Base {
 				<div class="legende-map" legend-for="lg-map-plugin-map-<?php echo $mapUniqueId; ?>"></div>
 				<script>
 					jQuery( window ).on( 'frontend/element_ready/global', () => {
-						var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>");
+						var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>");
 
 						<?php
 							if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_meetup'] ) {
