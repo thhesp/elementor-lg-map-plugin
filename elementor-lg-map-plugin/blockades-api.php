@@ -54,23 +54,31 @@ final class BlockadesBackendApi {
     }
 
     function loadCSV($csvUrl){
-        $data = $this->restRequest($csvUrl);
-        $rows = explode("\n",$data);
+        if(!wp_cache_get("elementor-lg-map-plugin_blockades_csv", '')) {
+            $data = $this->restRequest($csvUrl);
 
-        foreach($rows as $row) {
-            $trimmedRow = trim($row);
-            //skip columns row
-            if(str_starts_with($trimmedRow, "type,live,")){
-                continue;
+            if(!$data){
+                $rows = explode("\n",$data);
+
+                foreach($rows as $row) {
+                    $trimmedRow = trim($row);
+                    //skip columns row
+                    if(str_starts_with($trimmedRow, "type,live,")){
+                        continue;
+                    }
+
+
+                    //skip empty lines
+                    if(strlen($trimmedRow) > 0){
+                        $this->original_blockades[] = str_getcsv($trimmedRow);
+                    }
+                }
+
+                wp_cache_add("elementor-lg-map-plugin_blockades_csv", $this->original_blockades, '', $this->getCacheDuration());
             }
-
-
-            //skip empty lines
-            if(strlen($trimmedRow) > 0){
-                $this->original_blockades[] = str_getcsv($trimmedRow);
-            }
+        } else {
+            $this->original_blockades = wp_cache_get("elementor-lg-map-plugin_blockades_csv", '');
         }
-
     }
 
     function restRequest($url){
@@ -82,6 +90,7 @@ final class BlockadesBackendApi {
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $curl_response = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if ($curl_response === false) {
             $info = curl_getinfo($curl);
             if (true === WP_DEBUG) {
@@ -93,14 +102,24 @@ final class BlockadesBackendApi {
 
         curl_close($curl);
 
+        if($httpcode != 200){
+            error_log('Could not retrieve data '. $httpcode);
+            return false;
+        }
+
 
         return $curl_response;
     }
 
     function prepareData(){
+        if(!wp_cache_get("elementor-lg-map-plugin_blockades_api", '')) {
+            foreach($this->original_blockades as $row){
+                $this->blockades_data[] = $this->buildApiData($row,);
+            }
 
-        foreach($this->original_blockades as $row){
-            $this->blockades_data[] = $this->buildApiData($row,);
+            wp_cache_add("elementor-lg-map-plugin_blockades_api", $this->blockades_data, '', $this->getCacheDuration());
+        } else {
+            $this->blockades_data = wp_cache_get("elementor-lg-map-plugin_blockades_csv", '');
         }
     }
 
@@ -145,7 +164,7 @@ final class BlockadesBackendApi {
         $result = new WP_REST_Response($this->blockades_data, 200);
 
         // Set headers.
-        $result->set_headers(array('Cache-Control' => 'max-age=1800'));
+        $result->set_headers(array('Cache-Control' => 'max-age='.$this->getCacheDuration()));
 
         return $result;
     }
@@ -155,9 +174,13 @@ final class BlockadesBackendApi {
         $result = new WP_REST_Response($this->original_blockades, 200);
 
         // Set headers.
-        $result->set_headers(array('Cache-Control' => 'max-age=1800'));
+        $result->set_headers(array('Cache-Control' => 'max-age='.$this->getCacheDuration()));
 
         return $result;
+    }
+
+    function getCacheDuration(){
+        return get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] : 1800;
     }
     
 

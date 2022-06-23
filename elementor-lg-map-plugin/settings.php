@@ -86,6 +86,7 @@ final class MeetupSettings {
         add_settings_field( 'elementor-lg-map-plugin_mapbox_key', 'Mapbox API Key', array($this, 'mapboxKeyRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_meetups_url', 'Vortraege URL', array($this, 'meetupsUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_blockades_url', 'Blockaden URL', array($this, 'blockadesUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_cache_duration', 'Cache Duration', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
     }
 
     function configTextRender(){
@@ -110,6 +111,11 @@ final class MeetupSettings {
     function blockadesUrlRender(){
         $options = get_option( 'elementor-lg-map-plugin_settings' );
         echo "<input id='elementor-lg-map-plugin_settings_blockades_url' name='elementor-lg-map-plugin_settings[blockades_url]' type='text' value='" . esc_attr( $options['blockades_url'] ) . "' />";
+    }
+
+    function cacheDuration(){
+        $options = get_option( 'elementor-lg-map-plugin_settings', );
+        echo "<input id='elementor-lg-map-plugin_settings_cache_duration' name='elementor-lg-map-plugin_settings[cache_duration]' type='text' value='" . esc_attr( $options['cache_duration'] ) . "' />";
     }
 
     public static function get_instance() {
