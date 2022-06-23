@@ -38,7 +38,6 @@ final class MeetupBackendApi {
     public function __construct() {
         // Initialize the plugin.
         $this->meetupRoutes();
-        $this->init();
     }
 
     // API Routes
@@ -213,6 +212,7 @@ final class MeetupBackendApi {
 
     // API Endpoints
     function getAllMeetups() {
+        $this->init();
         $result = new WP_REST_Response($this->meetup_data, 200);
 
         // Set headers.
@@ -222,6 +222,7 @@ final class MeetupBackendApi {
     }
 
     function getOriginalData(WP_REST_Request $request) {
+        $this->init();
         $result = new WP_REST_Response($this->original_meetups, 200);
 
         // Set headers.

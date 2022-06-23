@@ -38,7 +38,6 @@ final class BlockadesBackendApi {
     public function __construct() {
         // Initialize the plugin.
         $this->blockadesRoutes();
-        $this->init();
     }
 
     // API Routes
@@ -142,6 +141,7 @@ final class BlockadesBackendApi {
 
     // API Endpoints
     function getAllBlockades() {
+        $this->init();
         $result = new WP_REST_Response($this->blockades_data, 200);
 
         // Set headers.
@@ -151,6 +151,7 @@ final class BlockadesBackendApi {
     }
 
     function getOriginalData(WP_REST_Request $request) {
+        $this->init();
         $result = new WP_REST_Response($this->original_blockades, 200);
 
         // Set headers.
