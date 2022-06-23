@@ -52,24 +52,29 @@ final class MeetupBackendApi {
         'callback' => array ($this, 'getOriginalData')
       ) );
 
-    register_rest_route( 'meetup/v1', '/cachereset', array(
+    register_rest_route( 'meetup/v1', '/reset', array(
         'methods' => 'GET',
         'callback' => array ($this, 'resetCache')
       ) );
     }
 
     function resetCache(){
-         wp_cache_delete("elementor-lg-map-plugin_meetups_csv", '');
-         wp_cache_delete("elementor-lg-map-plugin_meetups_api", '');
+        delete_transient("elementor-lg-map-plugin_meetups_csv_etag");
+        delete_transient("elementor-lg-map-plugin_meetups_csv");
+        delete_transient("elementor-lg-map-plugin_meetups_api");
+        $this->resetMetrics();
     }
 
-    function loadCSV($csvUrl){
-        if(!get_transient("elementor-lg-map-plugin_meetups_csv", '')) {
-            $data = $this->restRequestCSV($csvUrl);
-            $this->increaseMetrics('csv_loads');
 
-            if($data){
-                $rows = explode("\n",$data);
+
+    function loadCSV($csvUrl){
+        $etag = get_transient("elementor-lg-map-plugin_meetups_csv_etag");
+
+        $data = $this->restRequestCSV($csvUrl, $etag);
+
+        if(array_key_exists('csv', $data)) {
+            if($data['csv']){
+                $rows = explode("\n",$data['csv']);
 
                 foreach($rows as $row) {
                     //skip empty lines
@@ -79,47 +84,79 @@ final class MeetupBackendApi {
                     }
                 }
 
-                set_transient("elementor-lg-map-plugin_meetups_csv", $this->original_meetups,  $this->getCacheDuration());
+                set_transient("elementor-lg-map-plugin_meetups_csv", $this->original_meetups, $this->getBackendCacheDuration());
+                delete_transient("elementor-lg-map-plugin_meetups_api");
             }
-        } else {
+        } else if(array_key_exists('cache', $data)){
             $this->increaseMetrics('cache_hits');
-            $this->original_meetups = get_transient("elementor-lg-map-plugin_meetups_csv", '');
+            $this->original_meetups = get_transient("elementor-lg-map-plugin_meetups_csv");
         }
     }
 
-    function restRequestCSV($csvUrl){
+
+    function restRequestCSV($csvUrl, $etag){
         $data = file_get_contents($csvUrl);
         $curl = curl_init();
+        $headers = [];
 
         curl_setopt($curl, CURLOPT_URL, $csvUrl);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADERFUNCTION,
+            function ($curl, $header) use (&$headers) {
+                $len = strlen($header);
+                $header = explode(':', $header, 2);
+                if (count($header) < 2) // ignore invalid headers
+                    return $len;
+
+                $headers[strtolower(trim($header[0]))][] = trim($header[1]);
+
+                return $len;
+            }
+        );
+        if($etag){
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('If-None-Match:'.$etag));
+        }
 
         $curl_response = curl_exec($curl);
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if ($curl_response === false) {
             $info = curl_getinfo($curl);
-            if (true === WP_DEBUG) {
-                error_log('Could not request CSV Data ' . curl_error($curl));
-            }
+            error_log('Could not request CSV Data ' . curl_error($curl));
             curl_close($curl);
             return false;
         }
 
+        $etagResponse = $this->getEtag($headers);
+
         curl_close($curl);
+
+        if($httpcode == 304 && get_transient("elementor-lg-map-plugin_meetups_csv")){
+            $this->increaseMetrics('etag_hits');
+            return array('cache' => true);
+        }
+
+        $this->increaseMetrics('csv_loads');
 
         if($httpcode != 200){
             error_log('Could not retrieve data '. $httpcode);
             return false;
         }
 
+        set_transient("elementor-lg-map-plugin_meetups_csv_etag", $etagResponse, $this->getBackendCacheDuration());
+        $this->updateLoadTimer();
 
+        return array('csv' => $curl_response);
+    }
 
-        return $curl_response;
+    function getEtag($headers) {
+        $etagOriginal = $headers['etag'][0];
+
+        return str_replace("W/", "", $etagOriginal);
     }
 
     function prepareData($apikey){
-        if(!get_transient("elementor-lg-map-plugin_meetups_api", '')) {
+        if(!get_transient("elementor-lg-map-plugin_meetups_api")) {
             foreach($this->original_meetups as $row){
                 $address = $this->extractAddress($row);
                 if(strlen($address) > 0){
@@ -135,18 +172,17 @@ final class MeetupBackendApi {
                             $this->meetup_data[] = $this->buildApiData($row, $address, $geocodeData);
                         } else {
                             //write to error log
-                            if (true === WP_DEBUG) {
-                                error_log('Could not geocode the following entry: ' . print_r($row, true));
-                            }
+                            error_log('Could not geocode the following entry: ' . print_r($row, true));
                         }
                     }
                 }
             }
 
-             set_transient("elementor-lg-map-plugin_meetups_api", $this->meetup_data, $this->getCacheDuration());
+
+            set_transient("elementor-lg-map-plugin_meetups_api", $this->meetup_data, $this->getBackendCacheDuration());
         } else {
             $this->increaseMetrics('cache_hits');
-            $this->meetup_data = get_transient("elementor-lg-map-plugin_meetups_api", '');
+            $this->meetup_data = get_transient("elementor-lg-map-plugin_meetups_api");
         }
     }
 
@@ -194,11 +230,11 @@ final class MeetupBackendApi {
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $curl_response = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if ($curl_response === false) {
             $info = curl_getinfo($curl);
-            if (true === WP_DEBUG) {
-                error_log('Could not geocode the following entry: ' . curl_error($curl));
-            }
+            error_log('Geocoding failed with status code: ' . $httpcode);
+            error_log('Could not geocode the following entry: ' . curl_error($curl));
             curl_close($curl);
             return false;
         }
@@ -222,16 +258,12 @@ final class MeetupBackendApi {
                         $formatted_address);            
                  
             } else{
-                if (true === WP_DEBUG) {
-                    error_log("Could not find lat&long for address: ". $address);
-                }
+                error_log("Could not find lat&long for address: ". $address." with information: ".print_r($resp, true));
                 return false;
             }
              
         } else{
-            if (true === WP_DEBUG) {
-                error_log("Error during geocoding ". $address);
-            }
+            error_log("Error during geocoding ". $address ." with information: ".print_r($resp, true));
             return false;
         }
     }
@@ -257,8 +289,30 @@ final class MeetupBackendApi {
         update_option('elementor-lg-map-plugin_metrics' , $options);
     }
 
-    function getCacheDuration(){
+    function resetMetrics(){
+        $options = get_option(  'elementor-lg-map-plugin_metrics'  );
+        foreach ($options as $key => $value){
+            $options[$key] = 0;
+        }
+        update_option('elementor-lg-map-plugin_metrics' , $options);
+    }
+
+
+    function updateLoadTimer(){
+        $options = get_option(  'elementor-lg-map-plugin_settings'  );
+
+        $current_date = new DateTime(null, new DateTimeZone('Europe/Stockholm'));
+        $options['meetup_csv_load_time'] =  $current_date->format("H:i:s d.m.Y");
+
+        update_option('elementor-lg-map-plugin_settings' , $options);
+    }
+
+    function getFrontendCacheDuration(){
         return get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] : 1800;
+    }
+
+    function getBackendCacheDuration(){
+        return get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] : 86400;
     }
 
     // API Endpoints
@@ -267,7 +321,7 @@ final class MeetupBackendApi {
         $result = new WP_REST_Response($this->meetup_data, 200);
 
         // Set headers.
-        $result->set_headers(array('Cache-Control' => 'max-age='.$this->getCacheDuration()));
+        $result->set_headers(array('Cache-Control' => 'max-age='.$this->getFrontendCacheDuration()));
 
         return $result;
     }
@@ -277,7 +331,7 @@ final class MeetupBackendApi {
         $result = new WP_REST_Response($this->original_meetups, 200);
 
         // Set headers.
-        $result->set_headers(array('Cache-Control' => 'max-age='.$this->getCacheDuration()));
+        $result->set_headers(array('Cache-Control' => 'max-age='.$this->getFrontendCacheDuration()));
 
         return $result;
     }

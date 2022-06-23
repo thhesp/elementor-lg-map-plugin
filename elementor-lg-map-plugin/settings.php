@@ -83,6 +83,7 @@ final class MeetupSettings {
         <div>
             <p>API Requests: <?php echo $optionsForCache['api_requests'] ?></p>
             <p>Cache Hits:  <?php echo $optionsForCache['cache_hits'] ?></p>
+            <p>Etag Hits:  <?php echo $optionsForCache['etag_hits'] ?></p>
             <p>CSV Loads: <?php echo $optionsForCache['csv_loads'] ?></p>
             <p>Geocode Calls:  <?php echo $optionsForCache['geocode_calls'] ?></p>
         </div>
@@ -99,15 +100,8 @@ final class MeetupSettings {
         add_settings_field( 'elementor-lg-map-plugin_mapbox_key', 'Mapbox API Key', array($this, 'mapboxKeyRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_meetups_url', 'Vortraege URL', array($this, 'meetupsUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_blockades_url', 'Blockaden URL', array($this, 'blockadesUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
-        add_settings_field( 'elementor-lg-map-plugin_cache_duration', 'Cache Duration', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
-
-/*
-        add_settings_field( 'elementor-lg-map-plugin_api_requests', 'API Requests', array($this, 'apiRequests'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
-
-        add_settings_field( 'elementor-lg-map-plugin_csv_loads', 'CSV Loads', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
-
-        add_settings_field( 'elementor-lg-map-plugin_geocode_calls', 'Geocode Calls', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
-        */
+        add_settings_field( 'elementor-lg-map-plugin_cache_duration', 'Frontend Cache Duration', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_backend_cache_duration', 'Max Backend Cache Duration', array($this, 'backendCacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
     }
 
     function configTextRender(){
@@ -127,11 +121,15 @@ final class MeetupSettings {
     function meetupsUrlRender(){
         $options = get_option( 'elementor-lg-map-plugin_settings' );
         echo "<input id='elementor-lg-map-plugin_settings_meetups_url' name='elementor-lg-map-plugin_settings[meetups_url]' type='text' value='" . esc_attr( $options['meetups_url'] ) . "' />";
+        echo "<p style='margin-left:10px'> Aktuelle Version geladen: ". $options['meetup_csv_load_time']."</p>
+        <input hidden id='elementor-lg-map-plugin_settings_meetup_csv_load_time' name='elementor-lg-map-plugin_settings[meetup_csv_load_time]' type='text' value='" . esc_attr( $options['meetup_csv_load_time'] ) . "' />";
     }
 
     function blockadesUrlRender(){
         $options = get_option( 'elementor-lg-map-plugin_settings' );
         echo "<input id='elementor-lg-map-plugin_settings_blockades_url' name='elementor-lg-map-plugin_settings[blockades_url]' type='text' value='" . esc_attr( $options['blockades_url'] ) . "' />";
+        echo "<p style='margin-left:10px'> Aktuelle Version geladen: ". $options['blockades_csv_load_time']."</p>
+        <input hidden id='elementor-lg-map-plugin_settings_blockades_csv_load_time' name='elementor-lg-map-plugin_settings[blockades_csv_load_time]' type='text' value='" . esc_attr( $options['blockades_csv_load_time'] ) . "' />";
     }
 
     function cacheDuration(){
@@ -139,11 +137,10 @@ final class MeetupSettings {
         echo "<input id='elementor-lg-map-plugin_settings_cache_duration' name='elementor-lg-map-plugin_settings[cache_duration]' type='text' value='" . esc_attr( $options['cache_duration'] ) . "' />";
     }
 
-    function apiRequests(){
+    function backendCacheDuration(){
         $options = get_option( 'elementor-lg-map-plugin_settings', );
-        echo "<input id='elementor-lg-map-plugin_settings_api_requests' name='elementor-lg-map-plugin_settings[api_requests]' type='text' value='" . esc_attr( $options['api_requests'] ) . "' disabled />";
+        echo "<input id='elementor-lg-map-plugin_settings_backend_cache_duration' name='elementor-lg-map-plugin_settings[backend_cache_duration]' type='text' value='" . esc_attr( $options['backend_cache_duration'] ) . "' />";
     }
-
 
     public static function get_instance() {
         if ( ! isset( static::$instance ) ) {
