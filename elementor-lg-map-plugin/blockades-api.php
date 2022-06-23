@@ -51,13 +51,26 @@ final class BlockadesBackendApi {
         'methods' => 'GET',
         'callback' => array ($this, 'getOriginalData')
       ) );
+
+      register_rest_route( 'blockades/v1', '/cachereset', array(
+        'methods' => 'GET',
+        'callback' => array ($this, 'resetCache')
+      ) );
+    }
+
+
+    function resetCache(){
+         wp_cache_delete("elementor-lg-map-plugin_blockades_csv", '');
+         wp_cache_delete("elementor-lg-map-plugin_blockades_api", '');
     }
 
     function loadCSV($csvUrl){
-        if(!wp_cache_get("elementor-lg-map-plugin_blockades_csv", '')) {
-            $data = $this->restRequest($csvUrl);
 
-            if(!$data){
+        if(!get_transient("elementor-lg-map-plugin_blockades_csv", '')) {
+            $data = $this->restRequest($csvUrl);
+            $this->increaseMetrics('csv_loads');
+
+            if($data){
                 $rows = explode("\n",$data);
 
                 foreach($rows as $row) {
@@ -74,10 +87,11 @@ final class BlockadesBackendApi {
                     }
                 }
 
-                wp_cache_add("elementor-lg-map-plugin_blockades_csv", $this->original_blockades, '', $this->getCacheDuration());
+                set_transient("elementor-lg-map-plugin_blockades_csv", $this->original_blockades, $this->getCacheDuration());
             }
         } else {
-            $this->original_blockades = wp_cache_get("elementor-lg-map-plugin_blockades_csv", '');
+            $this->increaseMetrics('cache_hits');
+            $this->original_blockades = get_transient("elementor-lg-map-plugin_blockades_csv", '');
         }
     }
 
@@ -112,14 +126,15 @@ final class BlockadesBackendApi {
     }
 
     function prepareData(){
-        if(!wp_cache_get("elementor-lg-map-plugin_blockades_api", '')) {
+        if(!get_transient("elementor-lg-map-plugin_blockades_api", '')) {
             foreach($this->original_blockades as $row){
                 $this->blockades_data[] = $this->buildApiData($row,);
             }
 
-            wp_cache_add("elementor-lg-map-plugin_blockades_api", $this->blockades_data, '', $this->getCacheDuration());
+            set_transient("elementor-lg-map-plugin_blockades_api", $this->blockades_data,  $this->getCacheDuration());
         } else {
-            $this->blockades_data = wp_cache_get("elementor-lg-map-plugin_blockades_csv", '');
+            $this->increaseMetrics('cache_hits');
+            $this->blockades_data = get_transient("elementor-lg-map-plugin_blockades_csv", '');
         }
     }
 
@@ -152,10 +167,24 @@ final class BlockadesBackendApi {
     }
 
     function init() {
+        $this->increaseMetrics('api_requests');
+
         $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['blockades_url'];
 
         $this->loadCSV($csvUrl);
         $this->prepareData();
+    }
+
+    function increaseMetrics($identifier){
+        $options = get_option(  'elementor-lg-map-plugin_metrics'  );
+   
+        if($options && array_key_exists($identifier, $options))  {
+            $options[$identifier] = $options[$identifier]+1;
+        } else {
+            $options[$identifier] = 1;
+        }
+
+        update_option('elementor-lg-map-plugin_metrics' , $options);
     }
 
     // API Endpoints

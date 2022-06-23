@@ -51,13 +51,24 @@ final class MeetupBackendApi {
         'methods' => 'GET',
         'callback' => array ($this, 'getOriginalData')
       ) );
+
+    register_rest_route( 'meetup/v1', '/cachereset', array(
+        'methods' => 'GET',
+        'callback' => array ($this, 'resetCache')
+      ) );
+    }
+
+    function resetCache(){
+         wp_cache_delete("elementor-lg-map-plugin_meetups_csv", '');
+         wp_cache_delete("elementor-lg-map-plugin_meetups_api", '');
     }
 
     function loadCSV($csvUrl){
-        if(!wp_cache_get("elementor-lg-map-plugin_meetups_csv", '')) {
+        if(!get_transient("elementor-lg-map-plugin_meetups_csv", '')) {
             $data = $this->restRequestCSV($csvUrl);
+            $this->increaseMetrics('csv_loads');
 
-            if(!$data){
+            if($data){
                 $rows = explode("\n",$data);
 
                 foreach($rows as $row) {
@@ -68,10 +79,11 @@ final class MeetupBackendApi {
                     }
                 }
 
-                wp_cache_add("elementor-lg-map-plugin_meetups_csv", $this->original_meetups, '', $this->getCacheDuration());
+                set_transient("elementor-lg-map-plugin_meetups_csv", $this->original_meetups,  $this->getCacheDuration());
             }
         } else {
-            $this->original_meetups = wp_cache_get("elementor-lg-map-plugin_meetups_csv", '');
+            $this->increaseMetrics('cache_hits');
+            $this->original_meetups = get_transient("elementor-lg-map-plugin_meetups_csv", '');
         }
     }
 
@@ -107,7 +119,7 @@ final class MeetupBackendApi {
     }
 
     function prepareData($apikey){
-        if(!wp_cache_get("elementor-lg-map-plugin_meetups_api", '')) {
+        if(!get_transient("elementor-lg-map-plugin_meetups_api", '')) {
             foreach($this->original_meetups as $row){
                 $address = $this->extractAddress($row);
                 if(strlen($address) > 0){
@@ -131,9 +143,10 @@ final class MeetupBackendApi {
                 }
             }
 
-             wp_cache_add("elementor-lg-map-plugin_meetups_api", $this->meetup_data, '', $this->getCacheDuration());
+             set_transient("elementor-lg-map-plugin_meetups_api", $this->meetup_data, $this->getCacheDuration());
         } else {
-            $this->meetup_data = wp_cache_get("elementor-lg-map-plugin_meetups_api", '');
+            $this->increaseMetrics('cache_hits');
+            $this->meetup_data = get_transient("elementor-lg-map-plugin_meetups_api", '');
         }
     }
 
@@ -168,6 +181,7 @@ final class MeetupBackendApi {
     }
 
     function geocode($apikey, $address) {
+        $this->increaseMetrics('geocode_calls');
         $curl = curl_init();
 
         $escapedAddress = curl_escape($curl, $address);
@@ -223,11 +237,24 @@ final class MeetupBackendApi {
     }
 
     function init() {
+        $this->increaseMetrics('api_requests');
         $apikey = get_option( 'elementor-lg-map-plugin_settings' )['api_key'];
         $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['meetups_url'];
 
         $this->loadCSV($csvUrl);
         $this->prepareData($apikey);
+    }
+
+    function increaseMetrics($identifier){
+        $options = get_option(  'elementor-lg-map-plugin_metrics'  );
+   
+        if($options && array_key_exists($identifier, $options))  {
+            $options[$identifier] = $options[$identifier]+1;
+        } else {
+            $options[$identifier] = 1;
+        }
+
+        update_option('elementor-lg-map-plugin_metrics' , $options);
     }
 
     function getCacheDuration(){

@@ -64,6 +64,7 @@ final class MeetupSettings {
 
         // show error/update messages
         settings_errors( 'elementor-lg-map-plugin_messages' );
+
          ?>
         <h2>Letzte Generation Plugin Konfiguration</h2>
         <form action="options.php" method="post">
@@ -75,11 +76,23 @@ final class MeetupSettings {
             ?>
 
         </form>
+
+        <?php
+            $optionsForCache = get_option( 'elementor-lg-map-plugin_metrics' );
+        ?>
+        <div>
+            <p>API Requests: <?php echo $optionsForCache['api_requests'] ?></p>
+            <p>Cache Hits:  <?php echo $optionsForCache['cache_hits'] ?></p>
+            <p>CSV Loads: <?php echo $optionsForCache['csv_loads'] ?></p>
+            <p>Geocode Calls:  <?php echo $optionsForCache['geocode_calls'] ?></p>
+        </div>
         <?php
     }
 
     function registerSettings() {
         register_setting( 'elementor-lg-map-plugin_settings', 'elementor-lg-map-plugin_settings');
+        register_setting( 'elementor-lg-map-plugin_metrics', 'elementor-lg-map-plugin_metrics');
+
         add_settings_section( 'lg_meetup_settings', 'Konfiguration', array($this, 'configTextRender'), 'elementor-lg-map-plugin' );
 
         add_settings_field( 'elementor-lg-map-plugin_api_key', 'Google API Key', array($this, 'apiKeyRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
@@ -87,6 +100,14 @@ final class MeetupSettings {
         add_settings_field( 'elementor-lg-map-plugin_meetups_url', 'Vortraege URL', array($this, 'meetupsUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_blockades_url', 'Blockaden URL', array($this, 'blockadesUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_cache_duration', 'Cache Duration', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+
+/*
+        add_settings_field( 'elementor-lg-map-plugin_api_requests', 'API Requests', array($this, 'apiRequests'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+
+        add_settings_field( 'elementor-lg-map-plugin_csv_loads', 'CSV Loads', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+
+        add_settings_field( 'elementor-lg-map-plugin_geocode_calls', 'Geocode Calls', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        */
     }
 
     function configTextRender(){
@@ -117,6 +138,12 @@ final class MeetupSettings {
         $options = get_option( 'elementor-lg-map-plugin_settings', );
         echo "<input id='elementor-lg-map-plugin_settings_cache_duration' name='elementor-lg-map-plugin_settings[cache_duration]' type='text' value='" . esc_attr( $options['cache_duration'] ) . "' />";
     }
+
+    function apiRequests(){
+        $options = get_option( 'elementor-lg-map-plugin_settings', );
+        echo "<input id='elementor-lg-map-plugin_settings_api_requests' name='elementor-lg-map-plugin_settings[api_requests]' type='text' value='" . esc_attr( $options['api_requests'] ) . "' disabled />";
+    }
+
 
     public static function get_instance() {
         if ( ! isset( static::$instance ) ) {
