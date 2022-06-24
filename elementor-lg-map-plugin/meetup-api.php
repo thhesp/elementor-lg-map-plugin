@@ -63,6 +63,7 @@ final class MeetupBackendApi {
         delete_transient("elementor-lg-map-plugin_meetups_csv");
         delete_transient("elementor-lg-map-plugin_meetups_api");
         $this->resetMetrics();
+        $this->resetLoadTimer();
     }
 
 
@@ -79,6 +80,11 @@ final class MeetupBackendApi {
                 foreach($rows as $row) {
                     //skip empty lines
                     $trimmedRow = trim($row);
+
+                    if(str_starts_with($trimmedRow, "DATUM,UHRZEIT,")){
+                        continue;
+                    }
+
                     if(strlen($trimmedRow) > 0){
                         $this->original_meetups[] = str_getcsv($trimmedRow);
                     }
@@ -262,6 +268,11 @@ final class MeetupBackendApi {
                 return false;
             }
              
+        } else if($resp['status'] == 'OVER_QUERY_LIMIT'){
+            error_log("Reached query limit");
+            $this->increaseMetrics('query_limit_hits');
+            return false;
+
         } else{
             error_log("Error during geocoding ". $address ." with information: ".print_r($resp, true));
             return false;
@@ -303,6 +314,14 @@ final class MeetupBackendApi {
 
         $current_date = new DateTime(null, new DateTimeZone('Europe/Stockholm'));
         $options['meetup_csv_load_time'] =  $current_date->format("H:i:s d.m.Y");
+
+        update_option('elementor-lg-map-plugin_settings' , $options);
+    }
+
+    function resetLoadTimer(){
+        $options = get_option(  'elementor-lg-map-plugin_settings'  );
+
+        $options['meetup_csv_load_time'] =  null;
 
         update_option('elementor-lg-map-plugin_settings' , $options);
     }

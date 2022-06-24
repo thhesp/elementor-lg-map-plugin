@@ -63,6 +63,7 @@ final class BlockadesBackendApi {
         delete_transient("elementor-lg-map-plugin_blockades_csv");
         delete_transient("elementor-lg-map-plugin_blockades_api");
         $this->resetMetrics();
+        $this->resetLoadTimer();
     }
 
 
@@ -236,6 +237,14 @@ final class BlockadesBackendApi {
 
         $current_date = new DateTime(null, new DateTimeZone('Europe/Stockholm'));
         $options['blockades_csv_load_time'] =  $current_date->format("H:i:s d.m.Y");
+
+        update_option('elementor-lg-map-plugin_settings' , $options);
+    }
+
+    function resetLoadTimer(){
+        $options = get_option(  'elementor-lg-map-plugin_settings'  );
+
+        $options['blockades_csv_load_time'] =  null;
 
         update_option('elementor-lg-map-plugin_settings' , $options);
     }

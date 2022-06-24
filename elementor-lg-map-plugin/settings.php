@@ -86,6 +86,7 @@ final class MeetupSettings {
             <p>Etag Hits:  <?php echo $optionsForCache['etag_hits'] ?></p>
             <p>CSV Loads: <?php echo $optionsForCache['csv_loads'] ?></p>
             <p>Geocode Calls:  <?php echo $optionsForCache['geocode_calls'] ?></p>
+            <p>Querylimit Hits for Geocoding API:  <?php echo $optionsForCache['query_limit_hits'] ?></p>
         </div>
         <?php
     }
