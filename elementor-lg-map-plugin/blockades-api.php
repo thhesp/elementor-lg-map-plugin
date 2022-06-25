@@ -54,7 +54,10 @@ final class BlockadesBackendApi {
 
      register_rest_route( 'blockades/v1', '/reset', array(
         'methods' => 'GET',
-        'callback' => array ($this, 'resetCache')
+        'callback' => array ($this, 'resetCache'),
+        'permission_callback' => function () {
+              return current_user_can( 'manage_options' );
+            }
       ) );
     }
 
@@ -64,6 +67,8 @@ final class BlockadesBackendApi {
         delete_transient("elementor-lg-map-plugin_blockades_api");
         $this->resetMetrics();
         $this->resetLoadTimer();
+
+        return new WP_REST_Response("Cache reset", 200);
     }
 
 

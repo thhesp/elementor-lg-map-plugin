@@ -124,6 +124,25 @@ final class MeetupSettings {
         echo "<input id='elementor-lg-map-plugin_settings_meetups_url' name='elementor-lg-map-plugin_settings[meetups_url]' type='text' value='" . esc_attr( $options['meetups_url'] ) . "' />";
         echo "<p style='margin-left:10px'> Aktuelle Version geladen: ". $options['meetup_csv_load_time']."</p>
         <input hidden id='elementor-lg-map-plugin_settings_meetup_csv_load_time' name='elementor-lg-map-plugin_settings[meetup_csv_load_time]' type='text' value='" . esc_attr( $options['meetup_csv_load_time'] ) . "' />";
+        echo "<button type='button' onclick='onMeetupReset()''>Reset Vorträge Cache</button>";
+        echo "<script>
+            function onMeetupReset() {
+                fetch( '/wp-json/meetup/v1/reset', {
+                    method: 'GET',
+                    headers: {
+                        'X-WP-Nonce': '".wp_create_nonce('wp_rest')."'
+                    }
+                }).then(res => {
+                        if(res.ok) {
+                            alert('Cache reset');
+                        } else {
+                            alert('Failed mit status: ' + res.status);
+                        }
+
+                    })
+                  .catch(err => alert('Failed'));
+            }
+        </script>";
     }
 
     function blockadesUrlRender(){
@@ -131,6 +150,25 @@ final class MeetupSettings {
         echo "<input id='elementor-lg-map-plugin_settings_blockades_url' name='elementor-lg-map-plugin_settings[blockades_url]' type='text' value='" . esc_attr( $options['blockades_url'] ) . "' />";
         echo "<p style='margin-left:10px'> Aktuelle Version geladen: ". $options['blockades_csv_load_time']."</p>
         <input hidden id='elementor-lg-map-plugin_settings_blockades_csv_load_time' name='elementor-lg-map-plugin_settings[blockades_csv_load_time]' type='text' value='" . esc_attr( $options['blockades_csv_load_time'] ) . "' />";
+        echo "<button type='button' onclick='onBlockadesReset()''>Reset Blockaden Cache</button>";
+        echo "<script>
+            function onBlockadesReset() {
+                fetch( '/wp-json/blockades/v1/reset', {
+                    method: 'GET',
+                    headers: {
+                        'X-WP-Nonce': '".wp_create_nonce('wp_rest')."'
+                    }
+                }).then(res => {
+                        if(res.ok) {
+                            alert('Cache reset');
+                        } else {
+                            alert('Failed mit status: ' + res.status);
+                        }
+
+                    })
+                  .catch(err => alert('Failed'));
+            }
+        </script>";
     }
 
     function cacheDuration(){

@@ -54,7 +54,10 @@ final class MeetupBackendApi {
 
     register_rest_route( 'meetup/v1', '/reset', array(
         'methods' => 'GET',
-        'callback' => array ($this, 'resetCache')
+        'callback' => array ($this, 'resetCache'),
+        'permission_callback' => function () {
+            return current_user_can( 'manage_options' );
+        }
       ) );
     }
 
@@ -64,6 +67,8 @@ final class MeetupBackendApi {
         delete_transient("elementor-lg-map-plugin_meetups_api");
         $this->resetMetrics();
         $this->resetLoadTimer();
+
+        return new WP_REST_Response("Cache reset", 200);
     }
 
 
@@ -178,7 +183,7 @@ final class MeetupBackendApi {
                             $this->meetup_data[] = $this->buildApiData($row, $address, $geocodeData);
                         } else {
                             //write to error log
-                            error_log('Could not geocode the following entry: ' . print_r($row, true));
+                            error_log('Failed while geodecoding following entry, skipping it: ' . print_r($row, true));
                         }
                     }
                 }
@@ -250,7 +255,7 @@ final class MeetupBackendApi {
         $resp = json_decode($curl_response, true);
 
         // response status will be 'OK', if able to geocode given address 
-        if($resp['status']=='OK'){
+        if($resp['status'] == 'OK'){
      
             // get the important data
             $lati = isset($resp['results'][0]['geometry']['location']['lat']) ? $resp['results'][0]['geometry']['location']['lat'] : "";
@@ -268,8 +273,8 @@ final class MeetupBackendApi {
                 return false;
             }
              
-        } else if($resp['status'] == 'OVER_QUERY_LIMIT'){
-            error_log("Reached query limit");
+        } else if(strtolower($resp['status']) === strtolower("OVER_QUERY_LIMIT")){
+            error_log("Reached query limit ". $address ." with information: ".print_r($resp, true));
             $this->increaseMetrics('query_limit_hits');
             return false;
 
