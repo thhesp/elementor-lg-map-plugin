@@ -339,10 +339,51 @@ final class MeetupBackendApi {
         return get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] : 86400;
     }
 
+
+    function getMeetupsByLocation(){
+        $meetupDataByLocation = array();
+        foreach($this->meetup_data as $row){
+            if(!array_key_exists($row['location'], $meetupDataByLocation)) {
+                $meetupDataByLocation[$row['location']] = array(
+                         'location' => $row['location'],
+                         'city' =>  $row['city'],
+                         'usedAddress' => $row['usedAddress'],
+                         'formatted_address' => $row['formatted_address'],
+                         'geodata' => $row['geodata'],
+                         'meetups' => array(
+                                array(
+                                 'lecturer' => $row['lecturer'],
+                                 'date' => $row['date'],
+                                 'time' => $row['time']
+                             )
+                            )
+                     );
+            } else {
+                $meetupDataByLocation[$row['location']]['meetups'][] = array(
+                                         'lecturer' => $row['lecturer'],
+                                         'date' => $row['date'],
+                                         'time' => $row['time']
+                                     );
+            }
+        }
+
+        return $meetupDataByLocation;
+    }
+
     // API Endpoints
-    function getAllMeetups() {
+    function getAllMeetups(WP_REST_Request $request) {
         $this->init();
-        $result = new WP_REST_Response($this->meetup_data, 200);
+
+        $groupByLocation = $request->get_param( 'groupByLocation' );
+
+        $result = null;
+
+        if($groupByLocation){
+            $result = new WP_REST_Response($this->getMeetupsByLocation(), 200);
+        } else {
+            $result = new WP_REST_Response($this->meetup_data, 200);
+        }
+        
 
         // Set headers.
         $result->set_headers(array('Cache-Control' => 'max-age='.$this->getFrontendCacheDuration()));

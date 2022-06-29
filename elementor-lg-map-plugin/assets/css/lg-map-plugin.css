@@ -129,3 +129,9 @@
     .mapboxgl-ctrl-logo{
         display: none!important;
     }
+
+
+.meetup-separator {
+    border: none;
+    border-top: 1px dotted black;
+}
