@@ -117,6 +117,13 @@ function buildLegendForMap(mapElement) {
     if(checkForMarker(mapElement, 'marker-vortrag')) {
        jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="vortrag" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/vortrag-icon.svg" >Vorträge<br/>');
     }
+
+    
+    // remove legend if only one entry exists
+    if(jQuery("div[legend-for='"+mapId+"'] input").length <= 1){
+        jQuery(legendElement).empty();
+    }
+
 }
 
 
