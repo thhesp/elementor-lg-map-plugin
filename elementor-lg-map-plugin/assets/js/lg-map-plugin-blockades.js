@@ -39,7 +39,7 @@ async function getBlockades() {
 function getLiveIcon(entry) {
    switch (entry.type) {
           case 'blockade':
-              return '/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.png';
+              return '/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon_sdfw.png';
             break;
           case 'gesa':
               return '/wp-content/plugins/elementor-lg-map-plugin/assets/images/gesa-icon.png';

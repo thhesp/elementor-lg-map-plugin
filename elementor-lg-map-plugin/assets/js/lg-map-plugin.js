@@ -95,7 +95,7 @@ function buildLegendForMap(mapElement) {
     jQuery(legendElement).empty();
 
     if(checkForMarker(mapElement, 'marker-blockade')) {
-        jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon.svg" >Blockade<br/>');
+        jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon_sdfw.svg" >Blockade<br/>');
     }
 
     if(checkForMarker(mapElement, 'marker-soli')) {
@@ -115,7 +115,7 @@ function buildLegendForMap(mapElement) {
     }
 
     if(checkForMarker(mapElement, 'marker-vortrag')) {
-       jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="vortrag" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/cropped-favicon-32x32.png" >Vorträge<br/>');
+       jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="vortrag" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/vortrag-icon.svg" >Vorträge<br/>');
     }
 }
 
