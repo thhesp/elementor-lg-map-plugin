@@ -182,7 +182,7 @@ final class BlockadesBackendApi {
 
     function buildApiData($entry){
         $element = array(
-            'type' => $entry[0],
+            'type' => strtolower($entry[0]),
             'live' => $this->isLive($entry[1]),
             'title' => $entry[2],
             'description' => $entry[3]
@@ -203,7 +203,7 @@ final class BlockadesBackendApi {
     }
 
     function isLive($liveString){
-        return $liveString && $liveString == 'Ja';
+        return $liveString && strtolower($liveString) == 'ja';
 
     }
 
