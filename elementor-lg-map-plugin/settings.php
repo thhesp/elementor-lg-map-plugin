@@ -124,6 +124,7 @@ final class MeetupSettings {
         echo "<input id='elementor-lg-map-plugin_settings_meetups_url' name='elementor-lg-map-plugin_settings[meetups_url]' type='text' value='" . esc_attr( $options['meetups_url'] ) . "' />";
         echo "<p style='margin-left:10px'> Aktuelle Version geladen: ". $options['meetup_csv_load_time']."</p>
         <input hidden id='elementor-lg-map-plugin_settings_meetup_csv_load_time' name='elementor-lg-map-plugin_settings[meetup_csv_load_time]' type='text' value='" . esc_attr( $options['meetup_csv_load_time'] ) . "' />";
+        echo "<p>Aktueller CSV ETag: ".get_transient("elementor-lg-map-plugin_meetups_csv_etag"). "</p>"; 
         echo "<button type='button' onclick='onMeetupReset()''>Reset Vorträge Cache</button>";
         echo "<script>
             function onMeetupReset() {
@@ -150,6 +151,7 @@ final class MeetupSettings {
         echo "<input id='elementor-lg-map-plugin_settings_blockades_url' name='elementor-lg-map-plugin_settings[blockades_url]' type='text' value='" . esc_attr( $options['blockades_url'] ) . "' />";
         echo "<p style='margin-left:10px'> Aktuelle Version geladen: ". $options['blockades_csv_load_time']."</p>
         <input hidden id='elementor-lg-map-plugin_settings_blockades_csv_load_time' name='elementor-lg-map-plugin_settings[blockades_csv_load_time]' type='text' value='" . esc_attr( $options['blockades_csv_load_time'] ) . "' />";
+        echo "<p>Aktueller CSV ETag: ".get_transient("elementor-lg-map-plugin_blockades_csv_etag"). "</p>"; 
         echo "<button type='button' onclick='onBlockadesReset()''>Reset Blockaden Cache</button>";
         echo "<script>
             function onBlockadesReset() {
