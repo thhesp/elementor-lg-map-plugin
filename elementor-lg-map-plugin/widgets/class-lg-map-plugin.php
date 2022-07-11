@@ -146,6 +146,64 @@ class LgMapPlugin extends Widget_Base {
 				'default' => 'yes',
 			)
 		);
+		$this->add_control(
+			'custom_focus',
+			array(
+				'label'   => __( 'Kartenfokus anpassen', 'elementor-lg-map-plugin' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'label_on' => esc_html__( 'Custom', 'elementor-lg-map-plugin' ),
+				'label_off' => esc_html__( 'Default', 'elementor-lg-map-plugin' ),
+				'return_value' => 'yes',
+				'default' => 'no',
+			)
+		);
+		$this->add_control(
+			'focus_latitude',
+			array(
+				'label' => esc_html__( 'Kartenfokus Latitude', 'elementor-lg-map-plugin' ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'default' => esc_html__( '51.33364994162832', 'elementor-lg-map-plugin' ),
+				'condition' => [
+					'custom_focus' => 'yes'
+				],
+			
+			)
+		);
+		$this->add_control(
+			'focus_longitude',
+			array(
+				'label' => esc_html__( 'Kartenfokus Longitude', 'elementor-lg-map-plugin' ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'default' => esc_html__( '10.70519290565511', 'elementor-lg-map-plugin' ),
+				'condition' => [
+					'custom_focus' => 'yes'
+				],
+			)
+		);
+		$this->add_control(
+			'focus_zoom',
+			array(
+				'label' => esc_html__( 'Kartenfokus Zoom', 'elementor-lg-map-plugin' ),
+				'type' => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => [ 'zoom'],
+				'range' => [
+					'zoom' => [
+						'min' => -2,
+						'max' => 22,
+						'step' => 0.2,
+					],
+				],
+				'default' => [
+					'unit' => 'zoom',
+					'size' => 5,
+				],
+				'condition' => [
+					'custom_focus' => 'yes'
+				],
+
+			)
+		);
+
 		$this->end_controls_section();
 	}
 	/**
@@ -170,8 +228,13 @@ class LgMapPlugin extends Widget_Base {
 			<div class="legende-map" legend-for="lg-map-plugin-map-<?php echo $mapUniqueId; ?>"></div>
 			<script>
 				jQuery( window ).on( 'load', () => {
+					<?php if('yes' === $settings['custom_focus']) { ?>
+						var map<?php echo $mapUniqueId ?> = initMapboxMapWithFokus("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>", "<?php echo $settings['focus_latitude'] ?>", "<?php echo $settings['focus_longitude'] ?>", "<?php echo $settings['focus_zoom']['size'] ?>");
+					<?php } else { ?>
+						var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>");
+					<?php } ?>
 
-					var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>");
+					
 
 					<?php
 						if ( 'yes' === $settings['load_meetup'] ) {
@@ -211,7 +274,14 @@ class LgMapPlugin extends Widget_Base {
 				<div class="legende-map" legend-for="lg-map-plugin-map-<?php echo $mapUniqueId; ?>"></div>
 				<script>
 					jQuery( window ).on( 'frontend/element_ready/global', () => {
-						var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>");
+
+						<?php if('yes' === get_option( 'elementor-lg-map-plugin_settings' )['custom_focus']) { ?>
+							var map<?php echo $mapUniqueId ?> = initMapboxMapWithFokus("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>", "<?php echo get_option( 'elementor-lg-map-plugin_settings' )['focus_latitude'] ?>", "<?php echo get_option( 'elementor-lg-map-plugin_settings' )['focus_longitude'] ?>", "<?php echo get_option( 'elementor-lg-map-plugin_settings' )['focus_zoom']['size'] ?>");
+						<?php } else { ?>
+							var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>");
+
+						<?php } ?>
+
 
 						<?php
 							if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_meetup'] ) {

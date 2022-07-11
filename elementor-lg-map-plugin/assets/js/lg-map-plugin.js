@@ -9,6 +9,19 @@ function initMapboxMap(elementId, mapBoxKey) {
   return lgMapPluginMap;
 }
 
+function initMapboxMapWithFokus(elementId, mapBoxKey, latitude, longitude, zoom){
+      mapboxgl.accessToken = mapBoxKey;
+      var lgMapPluginMap = new mapboxgl.Map({
+        container: elementId,
+        style: 'mapbox://styles/climate-gonzo/ckyecnidz4x6314nuzz75453s',
+        center: [longitude, latitude],
+        zoom: zoom
+      });
+      lgMapPluginMap.addControl(new mapboxgl.FullscreenControl());
+
+      return lgMapPluginMap;
+    }
+
 function makeScrollable(elementId) {
   document.getElementById( elementId ).style.display = 'none';
 }
