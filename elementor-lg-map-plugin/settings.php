@@ -179,7 +179,7 @@ final class MeetupSettings {
         echo "<input id='elementor-lg-map-plugin_settings_cells_url' name='elementor-lg-map-plugin_settings[cells_url]' type='text' value='" . esc_attr( $options['cells_url'] ) . "' />";
         echo "<p style='margin-left:10px'> Aktuelle Version geladen: ". $options['cell_csv_load_time']."</p>
         <input hidden id='elementor-lg-map-plugin_settings_cell_csv_load_time' name='elementor-lg-map-plugin_settings[cell_csv_load_time]' type='text' value='" . esc_attr( $options['cell_csv_load_time'] ) . "' />";
-        echo "<p>Aktueller CSV ETag: ".get_transient("elementor-lg-map-plugin_cell_csv_etag"). "</p>"; 
+        echo "<p>Aktueller CSV ETag: ".get_transient("elementor-lg-map-plugin_cells_csv_etag"). "</p>"; 
         echo "<button type='button' onclick='onCellsReset()''>Reset Keimzellen Cache</button>";
         echo "<script>
             function onCellsReset() {
