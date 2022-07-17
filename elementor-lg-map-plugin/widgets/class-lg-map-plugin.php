@@ -33,11 +33,12 @@ class LgMapPlugin extends Widget_Base {
 	 */
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
-		wp_register_style( 'lg-map-plugin-css', plugins_url( '/assets/css/lg-map-plugin.css', ELEMENTOR_MAP_PLUGIN ), array(), '1.2.0' );
+		wp_register_style( 'lg-map-plugin-css', plugins_url( '/assets/css/lg-map-plugin.css', ELEMENTOR_MAP_PLUGIN ), array(), '1.4.0' );
 	
-	    wp_register_script( 'lg-map-plugin-js', plugins_url( '/assets/js/lg-map-plugin.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.3.0' );
+	    wp_register_script( 'lg-map-plugin-js', plugins_url( '/assets/js/lg-map-plugin.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.4.0' );
 	    wp_register_script( 'lg-map-plugin-meetups-js', plugins_url( '/assets/js/lg-map-plugin-meetups.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.2.0' );
 	    wp_register_script( 'lg-map-plugin-blockades-js', plugins_url( '/assets/js/lg-map-plugin-blockades.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.2.0' );
+	    wp_register_script( 'lg-map-plugin-cells-js', plugins_url( '/assets/js/lg-map-plugin-cells.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.4.0' );
   }
     
 	/**
@@ -105,7 +106,7 @@ class LgMapPlugin extends Widget_Base {
 	 * Enqueue scripts.
 	 */
 	public function get_script_depends() {
-		return array( 'lg-map-plugin-js', 'lg-map-plugin-meetups-js', 'lg-map-plugin-blockades-js');
+		return array( 'lg-map-plugin-js', 'lg-map-plugin-meetups-js', 'lg-map-plugin-blockades-js', 'lg-map-plugin-cells-js');
 	}
         
 	/**
@@ -144,6 +145,17 @@ class LgMapPlugin extends Widget_Base {
 				'label_off' => esc_html__( 'Hide', 'elementor-lg-map-plugin' ),
 				'return_value' => 'yes',
 				'default' => 'yes',
+			)
+		);
+		$this->add_control(
+			'load_cells',
+			array(
+				'label'   => __( 'Keimzellen anzeigen', 'elementor-lg-map-plugin' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'label_on' => esc_html__( 'Show', 'elementor-lg-map-plugin' ),
+				'label_off' => esc_html__( 'Hide', 'elementor-lg-map-plugin' ),
+				'return_value' => 'yes',
+				'default' => 'no',
 			)
 		);
 		$this->add_control(
@@ -248,6 +260,12 @@ class LgMapPlugin extends Widget_Base {
 								echo 'initBlockades(map' .  $mapUniqueId . ');';
 						}
 					?>
+
+					<?php
+						if ( 'yes' === $settings['load_cells'] ) {
+								echo 'initCells(map' .  $mapUniqueId . ');';
+						}
+					?>
 				});
 			</script>
 									
@@ -293,6 +311,12 @@ class LgMapPlugin extends Widget_Base {
 						<?php
 							if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_blockades'] ) {
 									echo 'initBlockades(map' .  $mapUniqueId . ');';
+							}
+						?>
+
+						<?php
+							if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_cells'] ) {
+									echo 'initCells(map' .  $mapUniqueId . ');';
 							}
 						?>
 					});

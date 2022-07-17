@@ -61,6 +61,10 @@ function toggleCheckboxPins(element) {
             jQuery("#" + mapId + " .vortragP").each(function() {
                 jQuery(this).removeClass("marker-display-none");
             }); 
+          case 'cell':
+            jQuery("#" + mapId + " .cellP").each(function() {
+                jQuery(this).removeClass("marker-display-none");
+            }); 
             break;
         } 
     } else {
@@ -91,6 +95,10 @@ function toggleCheckboxPins(element) {
             });
           case 'vortrag':
             jQuery("#" + mapId + " .vortragP").each(function() {
+                jQuery(this).addClass("marker-display-none");
+            });
+           case 'cell':
+            jQuery("#" + mapId + " .cellP").each(function() {
                 jQuery(this).addClass("marker-display-none");
             });
             break;
@@ -131,6 +139,9 @@ function buildLegendForMap(mapElement) {
        jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="vortrag" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/vortrag-icon.svg" >Vorträge<br/>');
     }
 
+    if(checkForMarker(mapElement, 'marker-cell')) {
+       jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="cell" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/cell-icon.svg" >Keimzellen<br/>');
+    }
     
     // remove legend if only one entry exists
     if(jQuery("div[legend-for='"+mapId+"'] input").length <= 1){

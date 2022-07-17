@@ -101,6 +101,7 @@ final class MeetupSettings {
         add_settings_field( 'elementor-lg-map-plugin_mapbox_key', 'Mapbox API Key', array($this, 'mapboxKeyRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_meetups_url', 'Vortraege URL', array($this, 'meetupsUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_blockades_url', 'Blockaden URL', array($this, 'blockadesUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_cells_url', 'Keimzellen URL', array($this, 'cellsUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_cache_duration', 'Frontend Cache Duration', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_backend_cache_duration', 'Max Backend Cache Duration', array($this, 'backendCacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
     }
@@ -156,6 +157,33 @@ final class MeetupSettings {
         echo "<script>
             function onBlockadesReset() {
                 fetch( '/wp-json/blockades/v1/reset', {
+                    method: 'GET',
+                    headers: {
+                        'X-WP-Nonce': '".wp_create_nonce('wp_rest')."'
+                    }
+                }).then(res => {
+                        if(res.ok) {
+                            alert('Cache reset');
+                        } else {
+                            alert('Failed mit status: ' + res.status);
+                        }
+
+                    })
+                  .catch(err => alert('Failed'));
+            }
+        </script>";
+    }
+
+    function cellsUrlRender(){
+        $options = get_option( 'elementor-lg-map-plugin_settings' );
+        echo "<input id='elementor-lg-map-plugin_settings_cells_url' name='elementor-lg-map-plugin_settings[cells_url]' type='text' value='" . esc_attr( $options['cells_url'] ) . "' />";
+        echo "<p style='margin-left:10px'> Aktuelle Version geladen: ". $options['cell_csv_load_time']."</p>
+        <input hidden id='elementor-lg-map-plugin_settings_cell_csv_load_time' name='elementor-lg-map-plugin_settings[cell_csv_load_time]' type='text' value='" . esc_attr( $options['cell_csv_load_time'] ) . "' />";
+        echo "<p>Aktueller CSV ETag: ".get_transient("elementor-lg-map-plugin_cell_csv_etag"). "</p>"; 
+        echo "<button type='button' onclick='onCellsReset()''>Reset Keimzellen Cache</button>";
+        echo "<script>
+            function onCellsReset() {
+                fetch( '/wp-json/cell/v1/reset', {
                     method: 'GET',
                     headers: {
                         'X-WP-Nonce': '".wp_create_nonce('wp_rest')."'
