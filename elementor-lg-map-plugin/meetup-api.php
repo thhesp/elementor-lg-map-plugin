@@ -90,6 +90,11 @@ final class MeetupBackendApi {
                         continue;
                     }
 
+                    if (strlen(ltrim($trimmedRow, ',')) == 0) {
+                        # empty entry
+                        continue;
+                    }
+
                     if(strlen($trimmedRow) > 0){
                         $this->original_meetups[] = str_getcsv($trimmedRow);
                     }

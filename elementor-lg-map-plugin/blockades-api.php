@@ -86,6 +86,11 @@ final class BlockadesBackendApi {
                     if(str_starts_with($trimmedRow, "type,live,")){
                         continue;
                     }
+                    
+                    if (strlen(ltrim($trimmedRow, ',')) == 0) {
+                        # empty entry
+                        continue;
+                    }
 
 
                     //skip empty lines

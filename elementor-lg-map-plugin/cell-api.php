@@ -90,6 +90,11 @@ final class CellBackendApi {
                         continue;
                     }
 
+                    if (strlen(ltrim($trimmedRow, ',')) == 0) {
+                        # empty entry
+                        continue;
+                    }
+
                     if(strlen($trimmedRow) > 0){
                         $this->original_cells[] = str_getcsv($trimmedRow);
                     }
