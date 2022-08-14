@@ -28,6 +28,7 @@ final class MeetupBackendApi {
 
     private $original_meetups = null;
     private $meetup_data = null;
+    private $geocode_addresses = array();
 
     /**
      * Constructor
@@ -176,13 +177,13 @@ final class MeetupBackendApi {
             foreach($this->original_meetups as $row){
                 $address = $this->extractAddress($row);
                 if(strlen($address) > 0){
-                    $geocodeData = $this->geocode($apikey, $address);
+                    $geocodeData = $this->geocodeCacheWrapper($apikey, $address);
 
                     if($geocodeData){
                         $this->meetup_data[] = $this->buildApiData($row, $address, $geocodeData);
                     } else {
                         // retry with only city
-                        $geocodeData = $this->geocode($apikey, $row[2]);
+                        $geocodeData = $this->geocodeCacheWrapper($apikey, $row[2]);
 
                         if($geocodeData){
                             $this->meetup_data[] = $this->buildApiData($row, $address, $geocodeData);
@@ -230,6 +231,20 @@ final class MeetupBackendApi {
                      'lng' => $geocodeData[1]
                  )
              );
+    }
+
+    function geocodeCacheWrapper($apikey, $address){
+        if(in_array($address, $this->geocode_addresses)){
+            return $this->geocode_addresses[$address];
+        }
+
+        $response = $this->geocode($apikey, $address);
+
+        if($response){
+            $this->geocode_addresses[$address] = $response;
+        }
+
+        return $response;
     }
 
     function geocode($apikey, $address) {

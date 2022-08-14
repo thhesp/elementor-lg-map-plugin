@@ -28,6 +28,7 @@ final class CellBackendApi {
 
     private $original_cells = null;
     private $cell_data = null;
+    private $geocode_addresses = array();
 
     /**
      * Constructor
@@ -176,7 +177,7 @@ final class CellBackendApi {
             foreach($this->original_cells as $row){
                 $address = $row[0];
                 if(strlen($address) > 0){
-                    $geocodeData = $this->geocode($apikey, $address);
+                    $geocodeData = $this->geocodeCacheWrapper($apikey, $address);
 
                     if($geocodeData){
                         $this->cell_data[] = $this->buildApiData($row, $address, $geocodeData);
@@ -202,6 +203,20 @@ final class CellBackendApi {
                      'lng' => $geocodeData[1]
                  )
              );
+    }
+
+    function geocodeCacheWrapper($apikey, $address){
+        if(in_array($address, $this->geocode_addresses)){
+            return $this->geocode_addresses[$address];
+        }
+
+        $response = $this->geocode($apikey, $address);
+
+        if($response){
+            $this->geocode_addresses[$address] = $response;
+        }
+
+        return $response;
     }
 
     function geocode($apikey, $address) {
