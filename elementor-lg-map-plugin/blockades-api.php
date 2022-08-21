@@ -36,6 +36,7 @@ final class BlockadesBackendApi {
      * @access public
      */
     public function __construct() {
+        $this->original_blockades = get_transient("elementor-lg-map-plugin_blockades_csv");
         // Initialize the plugin.
         $this->blockadesRoutes();
     }
@@ -76,7 +77,7 @@ final class BlockadesBackendApi {
         $etag = get_transient("elementor-lg-map-plugin_blockades_csv_etag");
 
         $data = $this->restRequestCSV($csvUrl, $etag);
-        if(array_key_exists('csv', $data)) {
+        if($data && array_key_exists('csv', $data)) {
             if($data['csv']){
                 $rows = explode("\n",$data['csv']);
 
@@ -86,7 +87,7 @@ final class BlockadesBackendApi {
                     if(str_starts_with($trimmedRow, "type,live,")){
                         continue;
                     }
-                    
+
                     if (strlen(ltrim($trimmedRow, ',')) == 0) {
                         # empty entry
                         continue;
@@ -102,7 +103,7 @@ final class BlockadesBackendApi {
                 set_transient("elementor-lg-map-plugin_blockades_csv", $this->original_blockades, $this->getBackendCacheDuration());
                 delete_transient("elementor-lg-map-plugin_blockades_api");
             }
-        } else if(array_key_exists('cache', $data)) {
+        } else if($data && array_key_exists('cache', $data)) {
             $this->increaseMetrics('cache_hits');
             $this->original_blockades = get_transient("elementor-lg-map-plugin_blockades_csv");
         }
@@ -212,7 +213,11 @@ final class BlockadesBackendApi {
 
     }
 
-    function init() {
+    public function dataExists(){
+        return $this->original_blockades && $this->blockades_data;
+    }
+
+    public function refresh() {
         $this->increaseMetrics('api_requests');
 
         $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['blockades_url'];
@@ -261,7 +266,6 @@ final class BlockadesBackendApi {
 
     // API Endpoints
     function getAllBlockades() {
-        $this->init();
         $result = new WP_REST_Response($this->blockades_data, 200);
 
         // Set headers.
@@ -271,7 +275,6 @@ final class BlockadesBackendApi {
     }
 
     function getOriginalData(WP_REST_Request $request) {
-        $this->init();
         $result = new WP_REST_Response($this->original_blockades, 200);
 
         // Set headers.
@@ -300,10 +303,7 @@ final class BlockadesBackendApi {
   
 }
 
-add_action( 'rest_api_init', 'my_blockades_api_init' );
-function my_blockades_api_init() {
-    BlockadesBackendApi::get_instance();
-}
+
 
 
 

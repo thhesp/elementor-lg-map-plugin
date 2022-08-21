@@ -93,6 +93,9 @@ final class Elementor_LgMapPlugin {
 			add_action( 'admin_notices', array( $this, 'admin_notice_minimum_php_version' ) );
 			return;
 		}
+
+		register_activation_hook( __FILE__, array($this, 'api_management_scheduled') );
+		register_deactivation_hook( __FILE__, array($this, 'api_management_unscheduled') );
 	}
         
 
@@ -187,6 +190,20 @@ final class Elementor_LgMapPlugin {
 			'Elementor',
 			self::MINIMUM_ELEMENTOR_VERSION
 		);
+	}
+
+
+	public function api_management_scheduled() {
+	    
+	    // for notifications
+	    if( !wp_next_scheduled( 'lg-map-plugin-api-mgmt-refresh' ) )
+	    {
+	        wp_schedule_event( time(), 'hourly', 'lg-map-plugin-api-mgmt-refresh' );
+	    }
+	}
+
+	public function api_management_unscheduled() {
+	     wp_clear_scheduled_hook('lg-map-plugin-api-mgmt-refresh');
 	}
 }
 

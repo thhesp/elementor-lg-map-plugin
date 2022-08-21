@@ -37,6 +37,8 @@ final class CellBackendApi {
      * @access public
      */
     public function __construct() {
+        $this->cell_data = get_transient("elementor-lg-map-plugin_cells_api");
+        $this->original_cells = get_transient("elementor-lg-map-plugin_cells_csv");
         // Initialize the plugin.
         $this->cellRoutes();
     }
@@ -79,7 +81,7 @@ final class CellBackendApi {
 
         $data = $this->restRequestCSV($csvUrl, $etag);
 
-        if(array_key_exists('csv', $data)) {
+        if($data && array_key_exists('csv', $data)) {
             if($data['csv']){
                 $rows = explode("\n",$data['csv']);
 
@@ -104,7 +106,7 @@ final class CellBackendApi {
                 set_transient("elementor-lg-map-plugin_cells_csv", $this->original_cells, $this->getBackendCacheDuration());
                 delete_transient("elementor-lg-map-plugin_cells_api");
             }
-        } else if(array_key_exists('cache', $data)){
+        } else if($data && array_key_exists('cache', $data)){
             $this->increaseMetrics('cache_hits');
             $this->original_cells = get_transient("elementor-lg-map-plugin_cells_csv");
         }
@@ -276,7 +278,11 @@ final class CellBackendApi {
         }
     }
 
-    function init() {
+    public function dataExists(){
+        return $this->original_cells && $this->cell_data;
+    }
+
+    public function refresh() {
         $this->increaseMetrics('api_requests');
         $apikey = get_option( 'elementor-lg-map-plugin_settings' )['api_key'];
         $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['cells_url'];
@@ -334,8 +340,6 @@ final class CellBackendApi {
 
     // API Endpoints
     function getAllCells(WP_REST_Request $request) {
-        $this->init();
-
         $result = new WP_REST_Response($this->cell_data, 200);
         
         // Set headers.
@@ -345,7 +349,6 @@ final class CellBackendApi {
     }
 
     function getOriginalData(WP_REST_Request $request) {
-        $this->init();
         $result = new WP_REST_Response($this->original_cells, 200);
 
         // Set headers.
@@ -367,10 +370,6 @@ final class CellBackendApi {
   
 }
 
-add_action( 'rest_api_init', 'my_cell_api_init' );
-function my_cell_api_init() {
-    CellBackendApi::get_instance();
-}
 
 
 

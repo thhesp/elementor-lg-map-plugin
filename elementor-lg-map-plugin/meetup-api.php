@@ -37,6 +37,8 @@ final class MeetupBackendApi {
      * @access public
      */
     public function __construct() {
+        $this->original_meetups = get_transient("elementor-lg-map-plugin_meetups_csv");
+        $this->meetup_data = get_transient("elementor-lg-map-plugin_meetups_api");
         // Initialize the plugin.
         $this->meetupRoutes();
     }
@@ -73,13 +75,12 @@ final class MeetupBackendApi {
     }
 
 
-
     function loadCSV($csvUrl){
         $etag = get_transient("elementor-lg-map-plugin_meetups_csv_etag");
 
         $data = $this->restRequestCSV($csvUrl, $etag);
 
-        if(array_key_exists('csv', $data)) {
+        if($data && array_key_exists('csv', $data)) {
             if($data['csv']){
                 $rows = explode("\n",$data['csv']);
 
@@ -104,7 +105,7 @@ final class MeetupBackendApi {
                 set_transient("elementor-lg-map-plugin_meetups_csv", $this->original_meetups, $this->getBackendCacheDuration());
                 delete_transient("elementor-lg-map-plugin_meetups_api");
             }
-        } else if(array_key_exists('cache', $data)){
+        } else if($data && array_key_exists('cache', $data)){
             $this->increaseMetrics('cache_hits');
             $this->original_meetups = get_transient("elementor-lg-map-plugin_meetups_csv");
         }
@@ -304,7 +305,11 @@ final class MeetupBackendApi {
         }
     }
 
-    function init() {
+    public function dataExists(){
+        return $this->meetup_data && $this->original_meetups;
+    }
+
+    public function refresh() {
         $this->increaseMetrics('api_requests');
         $apikey = get_option( 'elementor-lg-map-plugin_settings' )['api_key'];
         $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['meetups_url'];
@@ -392,8 +397,6 @@ final class MeetupBackendApi {
 
     // API Endpoints
     function getAllMeetups(WP_REST_Request $request) {
-        $this->init();
-
         $groupByLocation = $request->get_param( 'groupByLocation' );
 
         $result = null;
@@ -412,7 +415,6 @@ final class MeetupBackendApi {
     }
 
     function getOriginalData(WP_REST_Request $request) {
-        $this->init();
         $result = new WP_REST_Response($this->original_meetups, 200);
 
         // Set headers.
@@ -432,11 +434,6 @@ final class MeetupBackendApi {
 
    
   
-}
-
-add_action( 'rest_api_init', 'my_meetup_api_init' );
-function my_meetup_api_init() {
-    MeetupBackendApi::get_instance();
 }
 
 
