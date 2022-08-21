@@ -200,6 +200,7 @@ final class Elementor_LgMapPlugin {
 	    {
 	        wp_schedule_event( time(), 'hourly', 'lg-map-plugin-api-mgmt-refresh' );
 	    }
+	    ApiManagement::get_instance()->refresh();
 	}
 
 	public function api_management_unscheduled() {

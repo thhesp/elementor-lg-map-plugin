@@ -37,10 +37,9 @@ final class ApiManagement {
         $this->apis[] = BlockadesBackendApi::get_instance();
         $this->apis[] = MeetupBackendApi::get_instance();
         $this->apis[] = CellBackendApi::get_instance();
-        $this->init();
     }
 
-    private function init(){
+    public function init(){
         foreach($this->apis as $api){
             if(!$api->dataExists()){
                 $api->refresh();
@@ -72,5 +71,5 @@ function api_management_init() {
 add_action ('lg-map-plugin-api-mgmt-refresh', 'api_management_refresh');
 
 function api_management_refresh() {
-    ApiManagement::get_instance()->refresh();;
+    ApiManagement::get_instance()->refresh();
 }

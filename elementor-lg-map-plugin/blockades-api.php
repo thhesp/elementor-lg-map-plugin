@@ -37,6 +37,7 @@ final class BlockadesBackendApi {
      */
     public function __construct() {
         $this->original_blockades = get_transient("elementor-lg-map-plugin_blockades_csv");
+        $this->blockades_data = get_transient("elementor-lg-map-plugin_blockades_api");
         // Initialize the plugin.
         $this->blockadesRoutes();
     }
