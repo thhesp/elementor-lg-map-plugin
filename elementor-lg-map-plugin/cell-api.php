@@ -55,23 +55,19 @@ final class CellBackendApi {
         'callback' => array ($this, 'getOriginalData')
       ) );
 
-    register_rest_route( 'cell/v1', '/reset', array(
+    register_rest_route( 'cell/v1', '/refresh', array(
         'methods' => 'GET',
-        'callback' => array ($this, 'resetCache'),
+        'callback' => array ($this, 'refreshCache'),
         'permission_callback' => function () {
             return current_user_can( 'manage_options' );
         }
       ) );
     }
 
-    function resetCache(){
-        delete_transient("elementor-lg-map-plugin_cells_csv_etag");
-        delete_transient("elementor-lg-map-plugin_cells_csv");
-        delete_transient("elementor-lg-map-plugin_cells_api");
-        $this->resetMetrics();
-        $this->resetLoadTimer();
+    function refreshCache(){
+        $this->refresh();
 
-        return new WP_REST_Response("Cache reset", 200);
+        return new WP_REST_Response("Cache refresh", 200);
     }
 
 
@@ -83,6 +79,7 @@ final class CellBackendApi {
 
         if($data && array_key_exists('csv', $data)) {
             if($data['csv']){
+                $this->original_cells = array();
                 $rows = explode("\n",$data['csv']);
 
                 foreach($rows as $row) {
@@ -176,6 +173,7 @@ final class CellBackendApi {
 
     function prepareData($apikey){
         if(!get_transient("elementor-lg-map-plugin_cells_api")) {
+            $this->cell_data = array();
             foreach($this->original_cells as $row){
                 $address = $row[0];
                 if(strlen($address) > 0){

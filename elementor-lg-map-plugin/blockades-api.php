@@ -54,23 +54,19 @@ final class BlockadesBackendApi {
         'callback' => array ($this, 'getOriginalData')
       ) );
 
-     register_rest_route( 'blockades/v1', '/reset', array(
+     register_rest_route( 'blockades/v1', '/refresh', array(
         'methods' => 'GET',
-        'callback' => array ($this, 'resetCache'),
+        'callback' => array ($this, 'refreshCache'),
         'permission_callback' => function () {
               return current_user_can( 'manage_options' );
             }
       ) );
     }
 
-    function resetCache(){
-        delete_transient("elementor-lg-map-plugin_blockades_csv_etag");
-        delete_transient("elementor-lg-map-plugin_blockades_csv");
-        delete_transient("elementor-lg-map-plugin_blockades_api");
-        $this->resetMetrics();
-        $this->resetLoadTimer();
+    function refreshCache(){
+        $this->refresh();
 
-        return new WP_REST_Response("Cache reset", 200);
+        return new WP_REST_Response("Cache refresh", 200);
     }
 
 
@@ -80,6 +76,7 @@ final class BlockadesBackendApi {
         $data = $this->restRequestCSV($csvUrl, $etag);
         if($data && array_key_exists('csv', $data)) {
             if($data['csv']){
+                $this->original_blockades = array();
                 $rows = explode("\n",$data['csv']);
 
                 foreach($rows as $row) {
@@ -175,6 +172,7 @@ final class BlockadesBackendApi {
 
     function prepareData(){
         if(!get_transient("elementor-lg-map-plugin_blockades_api")) {
+            $this->blockades_data = array();
             foreach($this->original_blockades as $row){
                 $this->blockades_data[] = $this->buildApiData($row,);
             }

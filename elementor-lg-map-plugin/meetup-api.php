@@ -55,23 +55,19 @@ final class MeetupBackendApi {
         'callback' => array ($this, 'getOriginalData')
       ) );
 
-    register_rest_route( 'meetup/v1', '/reset', array(
+    register_rest_route( 'meetup/v1', '/refresh', array(
         'methods' => 'GET',
-        'callback' => array ($this, 'resetCache'),
+        'callback' => array ($this, 'refreshCache'),
         'permission_callback' => function () {
             return current_user_can( 'manage_options' );
         }
       ) );
     }
 
-    function resetCache(){
-        delete_transient("elementor-lg-map-plugin_meetups_csv_etag");
-        delete_transient("elementor-lg-map-plugin_meetups_csv");
-        delete_transient("elementor-lg-map-plugin_meetups_api");
-        $this->resetMetrics();
-        $this->resetLoadTimer();
+    function refreshCache(){
+        $this->refresh();
 
-        return new WP_REST_Response("Cache reset", 200);
+        return new WP_REST_Response("Cache refresh", 200);
     }
 
 
@@ -82,6 +78,7 @@ final class MeetupBackendApi {
 
         if($data && array_key_exists('csv', $data)) {
             if($data['csv']){
+                $this->original_meetups = array();
                 $rows = explode("\n",$data['csv']);
 
                 foreach($rows as $row) {
@@ -175,6 +172,7 @@ final class MeetupBackendApi {
 
     function prepareData($apikey){
         if(!get_transient("elementor-lg-map-plugin_meetups_api")) {
+            $this->meetup_data = array();
             foreach($this->original_meetups as $row){
                 $address = $this->extractAddress($row);
                 if(strlen($address) > 0){
