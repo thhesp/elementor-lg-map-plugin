@@ -81,6 +81,8 @@ final class MeetupSettings {
             $optionsForCache = get_option( 'elementor-lg-map-plugin_metrics' );
         ?>
         <div>
+            <p>Last Refresh <?php echo $optionsForCache['api_management_refresh'] ?></p>
+            <p>Next refresh <?php echo $this->toTimestamp(wp_next_scheduled( 'lg-map-plugin-api-mgmt-refresh')) ?></p>
             <p>API Requests: <?php echo $optionsForCache['api_requests'] ?></p>
             <p>Cache Hits:  <?php echo $optionsForCache['cache_hits'] ?></p>
             <p>Etag Hits:  <?php echo $optionsForCache['etag_hits'] ?></p>
@@ -89,6 +91,14 @@ final class MeetupSettings {
             <p>Querylimit Hits for Geocoding API:  <?php echo $optionsForCache['query_limit_hits'] ?></p>
         </div>
         <?php
+    }
+
+    function toTimestamp($time){
+        $tz = 'Europe/Stockholm';
+        $timestamp = time();
+        $dt = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
+        $dt->setTimestamp($time); //adjust the object to correct timestamp
+        return $dt->format('H:i:s d.m.Y');
     }
 
     function registerSettings() {

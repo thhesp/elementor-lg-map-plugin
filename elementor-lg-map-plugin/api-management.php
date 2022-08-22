@@ -40,6 +40,7 @@ final class ApiManagement {
     }
 
     public function init(){
+        $this->updateRefreshTimer();
         foreach($this->apis as $api){
             if(!$api->dataExists()){
                 $api->refresh();
@@ -48,9 +49,19 @@ final class ApiManagement {
     }
 
     public function refresh(){
+        $this->updateRefreshTimer();
         foreach($this->apis as $api){
             $api->refresh();
         }
+    }
+
+    function updateRefreshTimer(){
+        $options = get_option(  'elementor-lg-map-plugin_settings'  );
+
+        $current_date = new DateTime(null, new DateTimeZone('Europe/Stockholm'));
+        $options['api_management_refresh'] =  $current_date->format("H:i:s d.m.Y");
+
+        update_option('elementor-lg-map-plugin_settings' , $options);
     }
 
     public static function get_instance() {
