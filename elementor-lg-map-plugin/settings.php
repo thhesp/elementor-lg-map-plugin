@@ -83,12 +83,31 @@ final class MeetupSettings {
         <div>
             <p>Last Refresh <?php echo $optionsForCache['api_management_refresh'] ?></p>
             <p>Next refresh <?php echo $this->toTimestamp(wp_next_scheduled( 'lg-map-plugin-api-mgmt-refresh')) ?></p>
-            <p>API Requests: <?php echo $optionsForCache['api_requests'] ?></p>
-            <p>Cache Hits:  <?php echo $optionsForCache['cache_hits'] ?></p>
-            <p>Etag Hits:  <?php echo $optionsForCache['etag_hits'] ?></p>
-            <p>CSV Loads: <?php echo $optionsForCache['csv_loads'] ?></p>
-            <p>Geocode Calls:  <?php echo $optionsForCache['geocode_calls'] ?></p>
+
+            <p><button type='button' onclick='onReschedule()'>Reschedule Cache Refresh</button></p>
+                <script>
+                    function onReschedule() {
+                        fetch( '/wp-json/apimgmt/v1/reschedule', {
+                            method: 'GET',
+                            headers: {
+                                'X-WP-Nonce': '<?php echo wp_create_nonce('wp_rest'); ?>'
+                            }
+                        }).then(res => {
+                                if(res.ok) {
+                                    alert('Cache refresh rescheduled');
+                                } else {
+                                    alert('Failed mit status: ' + res.status);
+                                }
+
+                            })
+                          .catch(err => alert('Failed'));
+                    }
+                </script>
+
+
             <p>Querylimit Hits for Geocoding API:  <?php echo $optionsForCache['query_limit_hits'] ?></p>
+
+
         </div>
         <?php
     }

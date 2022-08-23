@@ -29,15 +29,10 @@ register_deactivation_hook( __FILE__, 'api_management_unscheduled');
 
 
 function api_management_scheduled() {
-    
-    // for notifications
-    if( !wp_next_scheduled( 'lg-map-plugin-api-mgmt-refresh' ) )
-    {
-        wp_schedule_event( time(), 'hourly', 'lg-map-plugin-api-mgmt-refresh' );
-    }
+    ApiManagement::get_instance()->scheduleCronIfNecessary();
     ApiManagement::get_instance()->refresh();
 }
 
 function api_management_unscheduled() {
-     wp_clear_scheduled_hook('lg-map-plugin-api-mgmt-refresh');
+     ApiManagement::get_instance()->unscheduleCron();
 }
