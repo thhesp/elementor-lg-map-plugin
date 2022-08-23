@@ -56,9 +56,9 @@ final class ApiManagement {
     }
 
     function lg_map_plugin_cron_schedule( $schedules ) {
-        $schedules['15min'] = array(
-                'interval'  => (60*15), // time in seconds
-                'display'   => 'Every 15 Minutes'
+        $schedules['30min'] = array(
+                'interval'  => (60*30), // time in seconds
+                'display'   => 'Every 30 Minutes'
         );
     return $schedules;
 }
@@ -105,7 +105,7 @@ final class ApiManagement {
     }
 
     public function scheduleCron(){
-        wp_schedule_event( (time()+ 15*60), '15min', 'lg-map-plugin-api-mgmt-refresh' );
+        wp_schedule_event( (time()+ 30*60), '30min', 'lg-map-plugin-api-mgmt-refresh' );
     }
 
     public function unscheduleCron(){
