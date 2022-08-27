@@ -53,6 +53,10 @@ final class ApiManagement {
                   return current_user_can( 'manage_options' );
                 }
           ) );
+        register_rest_route( 'apimgmt/v1', '/refresh', array(
+            'methods' => 'GET',
+            'callback' => array ($this, 'refresh')
+          ) );
     }
 
     function lg_map_plugin_cron_schedule( $schedules ) {
