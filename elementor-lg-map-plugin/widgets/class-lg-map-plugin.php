@@ -126,6 +126,14 @@ class LgMapPlugin extends Widget_Base {
 			)
 		);
 		$this->add_control(
+			'overlay_text',
+			array(
+				'label' => esc_html__( 'Kartenoverlay text', 'elementor-lg-map-plugin' ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'default' => esc_html__( 'interagieren', 'elementor-lg-map-plugin' )
+			)
+		);
+		$this->add_control(
 			'load_meetup',
 			array(
 				'label'   => __( 'Vorträge anzeigen', 'elementor-lg-map-plugin' ),
@@ -235,7 +243,7 @@ class LgMapPlugin extends Widget_Base {
           	<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 			<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
 			<script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">\x3C/script>')</script>
-			<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
+			<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; <?php echo $settings['overlay_text'] ?></p></div>
 			<div id='lg-map-plugin-map-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'></div>
 			<div class="legende-map" legend-for="lg-map-plugin-map-<?php echo $mapUniqueId; ?>"></div>
 			<script>
@@ -287,7 +295,7 @@ class LgMapPlugin extends Widget_Base {
               	<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
 				<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
 				<script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">\x3C/script>')</script>
-				<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; interagieren</p></div>
+				<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; <?php echo get_option( 'elementor-lg-map-plugin_settings' )['overlay_text'] ?></p></div>
 				<div id='lg-map-plugin-map-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'></div>
 				<div class="legende-map" legend-for="lg-map-plugin-map-<?php echo $mapUniqueId; ?>"></div>
 				<script>
