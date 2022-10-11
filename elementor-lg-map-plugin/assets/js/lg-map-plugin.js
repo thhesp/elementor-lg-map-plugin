@@ -140,7 +140,7 @@ function buildLegendForMap(mapElement) {
     }
 
     if(checkForMarker(mapElement, 'marker-cell')) {
-       jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="cell" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/cell-icon.svg" >Keimzellen<br/>');
+       jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="cell" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/cell_icon.svg" >Keimzellen<br/>');
     }
     
     // remove legend if only one entry exists

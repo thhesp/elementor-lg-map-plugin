@@ -39,7 +39,11 @@ class LgMapPlugin extends Widget_Base {
 	    wp_register_script( 'lg-map-plugin-meetups-js', plugins_url( '/assets/js/lg-map-plugin-meetups.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.2.0' );
 	    wp_register_script( 'lg-map-plugin-blockades-js', plugins_url( '/assets/js/lg-map-plugin-blockades.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.2.0' );
 	    wp_register_script( 'lg-map-plugin-cells-js', plugins_url( '/assets/js/lg-map-plugin-cells.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.4.0' );
-  }
+
+	    wp_register_script( 'lg-map-plugin-jquery-js', plugins_url( '/assets/js/jquery_v3.2.1.min.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.5.0' );
+	    wp_register_style( 'lg-map-plugin-mapbox-css', plugins_url( '/assets/css/mapbox.css', ELEMENTOR_MAP_PLUGIN ), array(), '1.5.0' );
+	    wp_register_script( 'lg-map-plugin-mapbox-js', plugins_url( '/assets/js/mapbox_2.3.1.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.5.0' );
+	}
     
 	/**
 	 * Retrieve the widget name.
@@ -99,14 +103,14 @@ class LgMapPlugin extends Widget_Base {
 	 * Enqueue styles.
 	 */
 	public function get_style_depends() {
-		return array( 'lg-map-plugin-css' );
+		return array( 'lg-map-plugin-css' , 'lg-map-plugin-mapbox-css');
 	}
         
         /**
 	 * Enqueue scripts.
 	 */
 	public function get_script_depends() {
-		return array( 'lg-map-plugin-js', 'lg-map-plugin-meetups-js', 'lg-map-plugin-blockades-js', 'lg-map-plugin-cells-js');
+		return array( 'lg-map-plugin-js', 'lg-map-plugin-meetups-js', 'lg-map-plugin-blockades-js', 'lg-map-plugin-cells-js', 'lg-map-plugin-jquery-js' , 'lg-map-plugin-mapbox-js');
 	}
         
 	/**
@@ -240,9 +244,6 @@ class LgMapPlugin extends Widget_Base {
 			$settings = $this->get_settings_for_display();
 			$mapUniqueId =  uniqid();
 		?>
-          	<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
-			<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
-			<script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">\x3C/script>')</script>
 			<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; <?php echo $settings['overlay_text'] ?></p></div>
 			<div id='lg-map-plugin-map-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'></div>
 			<div class="legende-map" legend-for="lg-map-plugin-map-<?php echo $mapUniqueId; ?>"></div>
@@ -292,9 +293,6 @@ class LgMapPlugin extends Widget_Base {
 				$mapboxKey = get_option( 'elementor-lg-map-plugin_settings' )['mapbox_key'];
 				$mapUniqueId =  uniqid();
     		?>
-              	<script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
-				<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
-				<script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">\x3C/script>')</script>
 				<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; <?php echo get_option( 'elementor-lg-map-plugin_settings' )['overlay_text'] ?></p></div>
 				<div id='lg-map-plugin-map-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'></div>
 				<div class="legende-map" legend-for="lg-map-plugin-map-<?php echo $mapUniqueId; ?>"></div>
