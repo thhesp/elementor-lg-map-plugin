@@ -28,7 +28,6 @@ final class CellBackendApi {
 
     private $original_cells = null;
     private $cell_data = null;
-    private $geocode_addresses = array();
 
     /**
      * Constructor
@@ -171,20 +170,14 @@ final class CellBackendApi {
         return str_replace("W/", "", $etagOriginal);
     }
 
-    function prepareData($apikey){
+
+
+    function prepareData(){
         if(!get_transient("elementor-lg-map-plugin_cells_api")) {
             $this->cell_data = array();
             foreach($this->original_cells as $row){
-                $address = $row[0];
-                if(strlen($address) > 0){
-                    $geocodeData = $this->geocodeCacheWrapper($apikey, $address);
-
-                    if($geocodeData){
-                        $this->cell_data[] = $this->buildApiData($row, $address, $geocodeData);
-                    } 
-                }
+                $this->cell_data[] = $this->buildApiData($row);
             }
-
 
             set_transient("elementor-lg-map-plugin_cells_api", $this->cell_data, $this->getBackendCacheDuration());
         } else {
@@ -193,87 +186,16 @@ final class CellBackendApi {
         }
     }
 
-    function buildApiData($entry, $usedAddress, $geocodeData){
-        return array(
+    function buildApiData($entry){
+        $element = array(
                  'city' => trim($entry[0]),
-                 'contact' => trim($entry[1]),
-                 'formatted_address' => $geocodeData[2],
-                 'geodata' => array(
-                     'lat' => $geocodeData[0],
-                     'lng' => $geocodeData[1]
-                 )
-             );
-    }
+                 'contact' => trim($entry[1])
+                 );
 
-    function geocodeCacheWrapper($apikey, $address){
-        if(in_array($address, $this->geocode_addresses)){
-            return $this->geocode_addresses[$address];
-        }
+        $element['geodata']['lat'] = floatval(trim(explode(',', $entry[2], )[1]));
+        $element['geodata']['lng'] = floatval(trim(explode(',', $entry[2])[0]));
 
-        $response = $this->geocode($apikey, $address);
-
-        if($response){
-            $this->geocode_addresses[$address] = $response;
-        }
-
-        return $response;
-    }
-
-    function geocode($apikey, $address) {
-        $this->increaseMetrics('geocode_calls');
-        $curl = curl_init();
-
-        $escapedAddress = curl_escape($curl, $address);
-
-        // google map geocode api url
-        $url = "https://maps.googleapis.com/maps/api/geocode/json?key={$apikey}&address={$escapedAddress}";
-
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $curl_response = curl_exec($curl);
-        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        if ($curl_response === false) {
-            $info = curl_getinfo($curl);
-            error_log('Geocoding failed with status code: ' . $httpcode);
-            error_log('Could not geocode the following entry: ' . curl_error($curl));
-            curl_close($curl);
-            return false;
-        }
-
-        curl_close($curl);
-
-        $resp = json_decode($curl_response, true);
-
-        // response status will be 'OK', if able to geocode given address 
-        if($resp['status'] == 'OK'){
-     
-            // get the important data
-            $lati = isset($resp['results'][0]['geometry']['location']['lat']) ? $resp['results'][0]['geometry']['location']['lat'] : "";
-            $longi = isset($resp['results'][0]['geometry']['location']['lng']) ? $resp['results'][0]['geometry']['location']['lng'] : "";
-            $formatted_address = isset($resp['results'][0]['formatted_address']) ? $resp['results'][0]['formatted_address'] : "";
-             
-            // verify if data is complete
-            if($lati && $longi && $formatted_address){
-                return array($lati, 
-                        $longi, 
-                        $formatted_address);            
-                 
-            } else{
-                error_log("Could not find lat&long for address: ". $address." with information: ".print_r($resp, true));
-                return false;
-            }
-             
-        } else if(strtolower($resp['status']) === strtolower("OVER_QUERY_LIMIT")){
-            error_log("Reached query limit ". $address ." with information: ".print_r($resp, true));
-            $this->increaseMetrics('query_limit_hits');
-            return false;
-
-        } else{
-            error_log("Error during geocoding ". $address ." with information: ".print_r($resp, true));
-            return false;
-        }
+        return $element;
     }
 
     public function dataExists(){
@@ -282,11 +204,10 @@ final class CellBackendApi {
 
     public function refresh() {
         $this->increaseMetrics('api_requests');
-        $apikey = get_option( 'elementor-lg-map-plugin_settings' )['api_key'];
         $csvUrl = get_option( 'elementor-lg-map-plugin_settings' )['cells_url'];
 
         $this->loadCSV($csvUrl);
-        $this->prepareData($apikey);
+        $this->prepareData();
     }
 
     function increaseMetrics($identifier){
