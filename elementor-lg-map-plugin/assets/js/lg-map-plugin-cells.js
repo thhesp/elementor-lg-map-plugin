@@ -26,5 +26,5 @@ async function getCells() {
 }
 
 function buildCellHtml(entry) {
-    return '<h3>' + entry.city + '</h3><p><a target="_blank" href=mailto:"' + entry.contact + '"><i class="kontakt-email"></i></a></p>';
+    return '<h3>' + entry.city + '</h3><p><a href="mailto:' + entry.contact + '"><i class="kontakt-email"></i></a></p>';
 }
