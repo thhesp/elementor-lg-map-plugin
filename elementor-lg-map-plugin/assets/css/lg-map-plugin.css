@@ -23,7 +23,7 @@
     }
 
     .marker-blockade:not(.marker-active) {
-        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon_sdfw.png');
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon_202210.png');
         z-index: 4;
     }
     .marker-gesa:not(.marker-active) {

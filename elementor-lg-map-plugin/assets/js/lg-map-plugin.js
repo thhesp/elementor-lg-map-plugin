@@ -2,7 +2,7 @@ function initMapboxMap(elementId, mapBoxKey) {
   mapboxgl.accessToken = mapBoxKey;
   var lgMapPluginMap = new mapboxgl.Map({
   container: elementId,
-    style: 'mapbox://styles/climate-gonzo/ckyecnidz4x6314nuzz75453s'
+    style: 'mapbox://styles/letztegeneration/clb4yd3za001b14nv5bvamfmi'
   });
   lgMapPluginMap.addControl(new mapboxgl.FullscreenControl());
 
@@ -13,7 +13,7 @@ function initMapboxMapWithFokus(elementId, mapBoxKey, latitude, longitude, zoom)
       mapboxgl.accessToken = mapBoxKey;
       var lgMapPluginMap = new mapboxgl.Map({
         container: elementId,
-        style: 'mapbox://styles/climate-gonzo/ckyecnidz4x6314nuzz75453s',
+        style: 'mapbox://styles/letztegeneration/clb4yd3za001b14nv5bvamfmi',
         center: [longitude, latitude],
         zoom: zoom
       });
@@ -116,7 +116,7 @@ function buildLegendForMap(mapElement) {
     jQuery(legendElement).empty();
 
     if(checkForMarker(mapElement, 'marker-blockade')) {
-        jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon_sdfw.svg" >Blockade<br/>');
+        jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="blockade" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon_202210.svg" >Blockade<br/>');
     }
 
     if(checkForMarker(mapElement, 'marker-soli')) {
