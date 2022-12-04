@@ -40,7 +40,6 @@ class LgMapPlugin extends Widget_Base {
 	    wp_register_script( 'lg-map-plugin-blockades-js', plugins_url( '/assets/js/lg-map-plugin-blockades.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.2.0' );
 	    wp_register_script( 'lg-map-plugin-cells-js', plugins_url( '/assets/js/lg-map-plugin-cells.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.4.0' );
 
-	    wp_register_script( 'lg-map-plugin-jquery-js', plugins_url( '/assets/js/jquery_v3.2.1.min.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.5.0' );
 	    wp_register_style( 'lg-map-plugin-mapbox-css', plugins_url( '/assets/css/mapbox.css', ELEMENTOR_MAP_PLUGIN ), array(), '1.5.0' );
 	    wp_register_script( 'lg-map-plugin-mapbox-js', plugins_url( '/assets/js/mapbox_2.3.1.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.5.0' );
 	}
@@ -110,7 +109,7 @@ class LgMapPlugin extends Widget_Base {
 	 * Enqueue scripts.
 	 */
 	public function get_script_depends() {
-		return array( 'lg-map-plugin-js', 'lg-map-plugin-meetups-js', 'lg-map-plugin-blockades-js', 'lg-map-plugin-cells-js', 'lg-map-plugin-jquery-js' , 'lg-map-plugin-mapbox-js');
+		return array( 'jquery', 'lg-map-plugin-js', 'lg-map-plugin-meetups-js', 'lg-map-plugin-blockades-js', 'lg-map-plugin-cells-js', 'lg-map-plugin-mapbox-js');
 	}
         
 	/**
