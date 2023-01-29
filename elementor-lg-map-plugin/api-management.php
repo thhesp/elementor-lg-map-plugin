@@ -60,9 +60,21 @@ final class ApiManagement {
     }
 
     function lg_map_plugin_cron_schedule( $schedules ) {
+        $schedules['15min'] = array(
+                'interval'  => (60*15), // time in seconds
+                'display'   => 'Every 15 Minutes'
+        );
         $schedules['30min'] = array(
                 'interval'  => (60*30), // time in seconds
                 'display'   => 'Every 30 Minutes'
+        );
+        $schedules['1hour'] = array(
+                'interval'  => (60*60), // time in seconds
+                'display'   => 'Every Hour'
+        );
+        $schedules['2hour'] = array(
+                'interval'  => (60*120), // time in seconds
+                'display'   => 'Every 2 Hours'
         );
     return $schedules;
 }
@@ -109,7 +121,29 @@ final class ApiManagement {
     }
 
     public function scheduleCron(){
-        wp_schedule_event( (time()+ 30*60), '30min', 'lg-map-plugin-api-mgmt-refresh' );
+
+        $options = get_option( 'elementor-lg-map-plugin_settings',);
+        $refreshTime= $options['backend_cache_duration'] ? $options['backend_cache_duration'] : '60min';
+        $reschudleInMinutes = 60*30;
+
+        switch($refreshTime){
+            case '15min':
+                $reschudleInMinutes = 60*15;
+                break;
+            case '30min':
+                $reschudleInMinutes = 60*30;
+                break;
+            case '1hour':
+                $reschudleInMinutes = 60*60;
+                break;
+            case '2hour':
+                $reschudleInMinutes = 60*120;
+                break;
+            default:
+                $reschudleInMinutes = 60*60;
+        }
+
+        wp_schedule_event( (time()+ $reschudleInMinutes), $refreshTime, 'lg-map-plugin-api-mgmt-refresh' );
     }
 
     public function unscheduleCron(){

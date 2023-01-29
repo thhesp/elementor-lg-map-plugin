@@ -95,6 +95,7 @@ final class MeetupSettings {
                         }).then(res => {
                                 if(res.ok) {
                                     alert('Cache refresh rescheduled');
+                                    location.reload();
                                 } else {
                                     alert('Failed mit status: ' + res.status);
                                 }
@@ -237,7 +238,12 @@ final class MeetupSettings {
 
     function backendCacheDuration(){
         $options = get_option( 'elementor-lg-map-plugin_settings', );
-        echo "<input id='elementor-lg-map-plugin_settings_backend_cache_duration' name='elementor-lg-map-plugin_settings[backend_cache_duration]' type='text' value='" . esc_attr( $options['backend_cache_duration'] ) . "' />";
+        echo  "<select name='elementor-lg-map-plugin_settings[backend_cache_duration]' id='elementor-lg-map-plugin_settings_backend_cache_duration'>
+            <option value='15min' ". (($options['backend_cache_duration'] == "15min") ? "selected":'').">Alle 15 Minuten</option>
+            <option value='30min' ". (($options['backend_cache_duration'] == "30min") ? "selected":'').">Alle 30 Minuten</option>
+            <option value='1hour' ". (($options['backend_cache_duration'] == "1hour") ? "selected":'').">Jede Stunde</option>
+            <option value='2hour' ". (($options['backend_cache_duration'] == "2hour") ? "selected":'').">Jede 2te Stunde</option>
+        </select>";
     }
 
     public static function get_instance() {
