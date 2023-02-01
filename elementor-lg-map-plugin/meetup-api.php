@@ -99,8 +99,10 @@ final class MeetupBackendApi {
                     }
                 }
 
-                set_transient("elementor-lg-map-plugin_meetups_csv", $this->original_meetups, $this->getBackendCacheDuration());
+                set_transient("elementor-lg-map-plugin_meetups_csv", $this->original_meetups);
                 delete_transient("elementor-lg-map-plugin_meetups_api");
+            } else {
+                error_log('Did not get CSV data in the response' . print_r($data));
             }
         } else if($data && array_key_exists('cache', $data)){
             $this->increaseMetrics('cache_hits');
@@ -158,7 +160,7 @@ final class MeetupBackendApi {
             return false;
         }
 
-        set_transient("elementor-lg-map-plugin_meetups_csv_etag", $etagResponse, $this->getBackendCacheDuration());
+        set_transient("elementor-lg-map-plugin_meetups_csv_etag", $etagResponse);
         $this->updateLoadTimer();
 
         return array('csv' => $curl_response);
@@ -195,7 +197,7 @@ final class MeetupBackendApi {
             }
 
 
-            set_transient("elementor-lg-map-plugin_meetups_api", $this->meetup_data, $this->getBackendCacheDuration());
+            set_transient("elementor-lg-map-plugin_meetups_api", $this->meetup_data);
         } else {
             $this->increaseMetrics('cache_hits');
             $this->meetup_data = get_transient("elementor-lg-map-plugin_meetups_api");
@@ -357,11 +359,6 @@ final class MeetupBackendApi {
     function getFrontendCacheDuration(){
         return get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] : 1800;
     }
-
-    function getBackendCacheDuration(){
-        return get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] : 86400;
-    }
-
 
     function getMeetupsByLocation(){
         $meetupDataByLocation = array();

@@ -98,7 +98,7 @@ final class BlockadesBackendApi {
                     }
                 }
 
-                set_transient("elementor-lg-map-plugin_blockades_csv", $this->original_blockades, $this->getBackendCacheDuration());
+                set_transient("elementor-lg-map-plugin_blockades_csv", $this->original_blockades);
                 delete_transient("elementor-lg-map-plugin_blockades_api");
             }
         } else if($data && array_key_exists('cache', $data)) {
@@ -156,7 +156,7 @@ final class BlockadesBackendApi {
             return false;
         }
 
-        set_transient("elementor-lg-map-plugin_blockades_csv_etag", $etagResponse, $this->getBackendCacheDuration());
+        set_transient("elementor-lg-map-plugin_blockades_csv_etag", $etagResponse);
         $this->updateLoadTimer();
 
         return array('csv' => $curl_response);
@@ -177,7 +177,7 @@ final class BlockadesBackendApi {
                 $this->blockades_data[] = $this->buildApiData($row,);
             }
 
-            set_transient("elementor-lg-map-plugin_blockades_api", $this->blockades_data, $this->getBackendCacheDuration());
+            set_transient("elementor-lg-map-plugin_blockades_api", $this->blockades_data);
         } else {
             $this->increaseMetrics('cache_hits');
             $this->blockades_data = get_transient("elementor-lg-map-plugin_blockades_api");
@@ -284,11 +284,6 @@ final class BlockadesBackendApi {
 
     function getFrontendCacheDuration(){
         return get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] : 1800;
-    }
-
-
-    function getBackendCacheDuration(){
-        return get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] : 86400;
     }
     
 

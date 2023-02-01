@@ -99,7 +99,7 @@ final class CellBackendApi {
                     }
                 }
 
-                set_transient("elementor-lg-map-plugin_cells_csv", $this->original_cells, $this->getBackendCacheDuration());
+                set_transient("elementor-lg-map-plugin_cells_csv", $this->original_cells);
                 delete_transient("elementor-lg-map-plugin_cells_api");
             }
         } else if($data && array_key_exists('cache', $data)){
@@ -158,7 +158,7 @@ final class CellBackendApi {
             return false;
         }
 
-        set_transient("elementor-lg-map-plugin_cells_csv_etag", $etagResponse, $this->getBackendCacheDuration());
+        set_transient("elementor-lg-map-plugin_cells_csv_etag", $etagResponse);
         $this->updateLoadTimer();
 
         return array('csv' => $curl_response);
@@ -179,7 +179,7 @@ final class CellBackendApi {
                 $this->cell_data[] = $this->buildApiData($row);
             }
 
-            set_transient("elementor-lg-map-plugin_cells_api", $this->cell_data, $this->getBackendCacheDuration());
+            set_transient("elementor-lg-map-plugin_cells_api", $this->cell_data);
         } else {
             $this->increaseMetrics('cache_hits');
             $this->cell_data = get_transient("elementor-lg-map-plugin_cells_api");
@@ -251,11 +251,6 @@ final class CellBackendApi {
     function getFrontendCacheDuration(){
         return get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] : 1800;
     }
-
-    function getBackendCacheDuration(){
-        return get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['backend_cache_duration'] : 86400;
-    }
-
 
     // API Endpoints
     function getAllCells(WP_REST_Request $request) {
