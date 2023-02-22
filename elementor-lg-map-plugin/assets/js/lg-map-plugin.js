@@ -65,6 +65,10 @@ function toggleCheckboxPins(element) {
             jQuery("#" + mapId + " .cellP").each(function() {
                 jQuery(this).removeClass("marker-display-none");
             }); 
+          case 'timeRemaining':
+            jQuery("#" + mapId + " .trainingP").each(function() {
+                jQuery(this).removeClass("marker-display-none");
+            }); 
             break;
         } 
     } else {
@@ -99,6 +103,10 @@ function toggleCheckboxPins(element) {
             });
            case 'cell':
             jQuery("#" + mapId + " .cellP").each(function() {
+                jQuery(this).addClass("marker-display-none");
+            });
+           case 'training':
+            jQuery("#" + mapId + " .trainingP").each(function() {
                 jQuery(this).addClass("marker-display-none");
             });
             break;
@@ -141,6 +149,10 @@ function buildLegendForMap(mapElement) {
 
     if(checkForMarker(mapElement, 'marker-cell')) {
        jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="cell" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon_202210.svg" >Keimzellen<br/>');
+    }
+
+    if(checkForMarker(mapElement, 'marker-training')) {
+       jQuery(legendElement).append('<input type="checkbox" onchange="toggleCheckboxPins(this)" id="training" legend-for="' + mapId + '" checked><img src="/wp-content/plugins/elementor-lg-map-plugin/assets/images/training-icon.svg" >Trainings<br/>');
     }
     
     // remove legend if only one entry exists

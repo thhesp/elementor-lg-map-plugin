@@ -35,10 +35,11 @@ class LgMapPlugin extends Widget_Base {
 		parent::__construct( $data, $args );
 		wp_register_style( 'lg-map-plugin-css', plugins_url( '/assets/css/lg-map-plugin.css', ELEMENTOR_MAP_PLUGIN ), array(), '1.4.0' );
 	
-	    wp_register_script( 'lg-map-plugin-js', plugins_url( '/assets/js/lg-map-plugin.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.4.0' );
+	    wp_register_script( 'lg-map-plugin-js', plugins_url( '/assets/js/lg-map-plugin.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.8.0' );
 	    wp_register_script( 'lg-map-plugin-meetups-js', plugins_url( '/assets/js/lg-map-plugin-meetups.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.2.0' );
 	    wp_register_script( 'lg-map-plugin-blockades-js', plugins_url( '/assets/js/lg-map-plugin-blockades.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.2.0' );
 	    wp_register_script( 'lg-map-plugin-cells-js', plugins_url( '/assets/js/lg-map-plugin-cells.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.4.0' );
+	    wp_register_script( 'lg-map-plugin-trainings-js', plugins_url( '/assets/js/lg-map-plugin-trainings.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.8.0' );
 
 	    wp_register_style( 'lg-map-plugin-mapbox-css', plugins_url( '/assets/css/mapbox.css', ELEMENTOR_MAP_PLUGIN ), array(), '1.5.0' );
 	    wp_register_script( 'lg-map-plugin-mapbox-js', plugins_url( '/assets/js/mapbox_2.3.1.js', ELEMENTOR_MAP_PLUGIN ), array(), '1.5.0' );
@@ -109,7 +110,7 @@ class LgMapPlugin extends Widget_Base {
 	 * Enqueue scripts.
 	 */
 	public function get_script_depends() {
-		return array( 'jquery', 'lg-map-plugin-js', 'lg-map-plugin-meetups-js', 'lg-map-plugin-blockades-js', 'lg-map-plugin-cells-js', 'lg-map-plugin-mapbox-js');
+		return array( 'jquery', 'lg-map-plugin-js', 'lg-map-plugin-meetups-js', 'lg-map-plugin-blockades-js', 'lg-map-plugin-cells-js',  'lg-map-plugin-trainings-js','lg-map-plugin-mapbox-js');
 	}
         
 	/**
@@ -162,6 +163,17 @@ class LgMapPlugin extends Widget_Base {
 			'load_cells',
 			array(
 				'label'   => __( 'Keimzellen anzeigen', 'elementor-lg-map-plugin' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'label_on' => esc_html__( 'Show', 'elementor-lg-map-plugin' ),
+				'label_off' => esc_html__( 'Hide', 'elementor-lg-map-plugin' ),
+				'return_value' => 'yes',
+				'default' => 'no',
+			)
+		);
+		$this->add_control(
+			'load_trainings',
+			array(
+				'label'   => __( 'Trainings anzeigen', 'elementor-lg-map-plugin' ),
 				'type'    => Controls_Manager::SWITCHER,
 				'label_on' => esc_html__( 'Show', 'elementor-lg-map-plugin' ),
 				'label_off' => esc_html__( 'Hide', 'elementor-lg-map-plugin' ),
@@ -274,6 +286,12 @@ class LgMapPlugin extends Widget_Base {
 								echo 'initCells(map' .  $mapUniqueId . ');';
 						}
 					?>
+
+					<?php
+						if ( 'yes' === $settings['load_trainings'] ) {
+								echo 'initTrainings(map' .  $mapUniqueId . ');';
+						}
+					?>
 				});
 			</script>
 									
@@ -324,6 +342,12 @@ class LgMapPlugin extends Widget_Base {
 									echo 'initCells(map' .  $mapUniqueId . ');';
 							}
 						?>
+
+						<?php
+						if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_trainings'] ){
+								echo 'initTrainings(map' .  $mapUniqueId . ');';
+						}
+					?>
 					});
 				</script>
 									

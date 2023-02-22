@@ -17,6 +17,11 @@
         z-index: 2;
     }
 
+    .marker-training {
+        background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/training-icon.png');
+        z-index: 2;
+    }
+
     .marker-cell {
         background-image: url('/wp-content/plugins/elementor-lg-map-plugin/assets/images/blockade-icon_202210.png');
         z-index: 2;
@@ -141,6 +146,14 @@
     border-top: 1px dotted black;
 }
 
+.training-separator {
+    border: none;
+    border-top: 1px dotted black;
+}
+
+.training-city {
+
+}
 
 .kontakt-email {
   background-color: #EE2F04;
