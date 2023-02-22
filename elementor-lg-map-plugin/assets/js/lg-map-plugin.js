@@ -2,7 +2,7 @@ function initMapboxMap(elementId, mapBoxKey) {
   mapboxgl.accessToken = mapBoxKey;
   var lgMapPluginMap = new mapboxgl.Map({
   container: elementId,
-    style: 'mapbox://styles/letztegeneration/clb4yd3za001b14nv5bvamfmi'
+    style: 'mapbox://styles/rogerha/cleewub6r000801p75eyicnjg'
   });
   lgMapPluginMap.addControl(new mapboxgl.FullscreenControl());
 
@@ -13,7 +13,7 @@ function initMapboxMapWithFokus(elementId, mapBoxKey, latitude, longitude, zoom)
       mapboxgl.accessToken = mapBoxKey;
       var lgMapPluginMap = new mapboxgl.Map({
         container: elementId,
-        style: 'mapbox://styles/letztegeneration/clb4yd3za001b14nv5bvamfmi',
+        style: 'mapbox://styles/rogerha/cleewub6r000801p75eyicnjg',
         center: [longitude, latitude],
         zoom: zoom
       });
