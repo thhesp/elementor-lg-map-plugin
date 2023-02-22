@@ -1,19 +1,19 @@
-function initMapboxMap(elementId, mapBoxKey) {
+function initMapboxMap(elementId, mapBoxKey, style) {
   mapboxgl.accessToken = mapBoxKey;
   var lgMapPluginMap = new mapboxgl.Map({
   container: elementId,
-    style: 'mapbox://styles/rogerha/cleewub6r000801p75eyicnjg'
+    style: style
   });
   lgMapPluginMap.addControl(new mapboxgl.FullscreenControl());
 
   return lgMapPluginMap;
 }
 
-function initMapboxMapWithFokus(elementId, mapBoxKey, latitude, longitude, zoom){
+function initMapboxMapWithFokus(elementId, mapBoxKey, style, latitude, longitude, zoom){
       mapboxgl.accessToken = mapBoxKey;
       var lgMapPluginMap = new mapboxgl.Map({
         container: elementId,
-        style: 'mapbox://styles/rogerha/cleewub6r000801p75eyicnjg',
+        style: style,
         center: [longitude, latitude],
         zoom: zoom
       });

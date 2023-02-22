@@ -129,6 +129,7 @@ final class MeetupSettings {
 
         add_settings_field( 'elementor-lg-map-plugin_api_key', 'Google API Key', array($this, 'apiKeyRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_mapbox_key', 'Mapbox API Key', array($this, 'mapboxKeyRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_mapbox_style', 'Mapbox Style', array($this, 'mapboxStyleRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_meetups_url', 'Vortraege URL', array($this, 'meetupsUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_blockades_url', 'Blockaden URL', array($this, 'blockadesUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_cells_url', 'Keimzellen URL', array($this, 'cellsUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
@@ -149,6 +150,11 @@ final class MeetupSettings {
     function mapboxKeyRender(){
         $options = get_option( 'elementor-lg-map-plugin_settings' );
         echo "<input id='elementor-lg-map-plugin_settings_mapbox_key' name='elementor-lg-map-plugin_settings[mapbox_key]' type='text' value='" . esc_attr( $options['mapbox_key'] ) . "' />";
+    }
+
+    function mapboxStyleRender(){
+        $options = get_option( 'elementor-lg-map-plugin_settings' );
+        echo "<input id='elementor-lg-map-plugin_settings_mapbox_style' name='elementor-lg-map-plugin_settings[mapbox_style]' type='text' value='" . esc_attr( $options['mapbox_style'] ) . "' />";
     }
 
     function meetupsUrlRender(){

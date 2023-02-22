@@ -252,6 +252,7 @@ class LgMapPlugin extends Widget_Base {
 	 */
 	protected function render() {
 			$mapboxKey = get_option( 'elementor-lg-map-plugin_settings' )['mapbox_key'];
+			$mapboxStyle = get_option( 'elementor-lg-map-plugin_settings' )['mapbox_style'];
 			$settings = $this->get_settings_for_display();
 			$mapUniqueId =  uniqid();
 		?>
@@ -261,9 +262,9 @@ class LgMapPlugin extends Widget_Base {
 			<script>
 				jQuery( window ).on( 'load', () => {
 					<?php if('yes' === $settings['custom_focus']) { ?>
-						var map<?php echo $mapUniqueId ?> = initMapboxMapWithFokus("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>", "<?php echo $settings['focus_latitude'] ?>", "<?php echo $settings['focus_longitude'] ?>", "<?php echo $settings['focus_zoom']['size'] ?>");
+						var map<?php echo $mapUniqueId ?> = initMapboxMapWithFokus("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>", "<?php echo $mapboxStyle ?>", "<?php echo $settings['focus_latitude'] ?>", "<?php echo $settings['focus_longitude'] ?>", "<?php echo $settings['focus_zoom']['size'] ?>");
 					<?php } else { ?>
-						var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>");
+						var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>", "<?php echo $mapboxStyle ?>");
 					<?php } ?>
 
 					
