@@ -371,7 +371,6 @@ final class TrainingBackendApi {
                 $trainingDataByLocation[$row['city']] = array(
                          'city' =>  $row['city'],
                          'contact' => $row['contact'],
-                         'usedAddress' => $row['usedAddress'],
                          'formatted_address' => $row['formatted_address'],
                          'geodata' => $row['geodata'],
                          'trainings' => array(
