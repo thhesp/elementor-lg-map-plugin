@@ -363,9 +363,8 @@ final class MeetupBackendApi {
     function getMeetupsByLocation(){
         $meetupDataByLocation = array();
         foreach($this->meetup_data as $row){
-            if(!array_key_exists($row['location'], $meetupDataByLocation)) {
-                $meetupDataByLocation[$row['location']] = array(
-                         'location' => $row['location'],
+            if(!array_key_exists($row['formatted_address'], $meetupDataByLocation)) {
+                $meetupDataByLocation[$row['formatted_address']] = array(
                          'city' =>  $row['city'],
                          'usedAddress' => $row['usedAddress'],
                          'formatted_address' => $row['formatted_address'],
@@ -373,14 +372,17 @@ final class MeetupBackendApi {
                          'meetups' => array(
                                 array(
                                  'lecturer' => $row['lecturer'],
+                                 'location' => $row['location'],
+                                 
                                  'date' => $row['date'],
                                  'time' => $row['time']
                              )
                             )
                      );
             } else {
-                $meetupDataByLocation[$row['location']]['meetups'][] = array(
+                $meetupDataByLocation[$row['formatted_address']]['meetups'][] = array(
                                          'lecturer' => $row['lecturer'],
+                                         'location' => $row['location'],
                                          'date' => $row['date'],
                                          'time' => $row['time']
                                      );

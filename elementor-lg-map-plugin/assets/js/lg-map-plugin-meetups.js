@@ -32,24 +32,26 @@ function buildMeetupHtml(entry) {
     let hostUrl = 'https://' + window.location.host;
     let html = '<div class="map-popup">';
     html += entry.location + ' in ' + entry.city + '<br>';
+    let cityUmlauts = entry.city.toLowerCase();
+    cityUmlauts = cityUmlauts.replace(/\u00fc/g, "ue");
+    cityUmlauts = cityUmlauts.replace(/\u00dc/g, "Ue");
+    cityUmlauts = cityUmlauts.replace(/\u00c4/g, "Ae");
+    cityUmlauts = cityUmlauts.replace(/\u00e4/g, "ae");
+    cityUmlauts = cityUmlauts.replace(/\u00d6/g, "Oe");
+    cityUmlauts = cityUmlauts.replace(/\u00f6/g, "oe");
+    cityUmlauts = cityUmlauts.replace(/\u00df/g, "ss");
+
+      html += '<a style="color:#FF4C00;" href="' + hostUrl + '/wig/' + cityUmlauts + '/">Widerstandsgruppe ' + entry.city + '</a><br>';
 
     for (let i = 0; i < entry.meetups.length; i++) {
         if (i > 0) {
             html += '<div class="meetup-separator"></div>'
         }
 
-        let cityUmlauts = entry.city.toLowerCase();
-        cityUmlauts = cityUmlauts.replace(/\u00fc/g, "ue");
-        cityUmlauts = cityUmlauts.replace(/\u00dc/g, "Ue");
-        cityUmlauts = cityUmlauts.replace(/\u00c4/g, "Ae");
-        cityUmlauts = cityUmlauts.replace(/\u00e4/g, "ae");
-        cityUmlauts = cityUmlauts.replace(/\u00d6/g, "Oe");
-        cityUmlauts = cityUmlauts.replace(/\u00f6/g, "oe");
-        cityUmlauts = cityUmlauts.replace(/\u00df/g, "ss");
-
-        html += '<a style="color:#FF4C00;" href="' + hostUrl + '/wig/' + cityUmlauts + '/">Widerstandsgruppe ' + entry.city + '</a><br>';
-        html += '<b>' + entry.meetups[i].date + ' ' + entry.meetups[i].time + '</b><br>';
+        html += '<b>' + entry.meetups[i].location + '</b><br>';
         html += entry.meetups[i].lecturer ? ' Vortragende/-r: ' + entry.meetups[i].lecturer + '<br>' : '';
+        html += entry.meetups[i].lecturer ? ' Vortragende/-r: ' + entry.meetups[i].lecturer + '<br>' : '';
+
     }
 
     html += '</div>';
