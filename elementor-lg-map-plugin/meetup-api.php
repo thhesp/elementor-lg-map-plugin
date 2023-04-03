@@ -366,6 +366,7 @@ final class MeetupBackendApi {
             if(!array_key_exists($row['formatted_address'], $meetupDataByLocation)) {
                 $meetupDataByLocation[$row['formatted_address']] = array(
                          'city' =>  $row['city'],
+                         'location' => $row['location'],
                          'usedAddress' => $row['usedAddress'],
                          'formatted_address' => $row['formatted_address'],
                          'geodata' => $row['geodata'],

@@ -48,8 +48,11 @@ function buildMeetupHtml(entry) {
             html += '<div class="meetup-separator"></div>'
         }
 
-        html += '<b>' + entry.meetups[i].location + '</b><br>';
-        html += entry.meetups[i].lecturer ? ' Vortragende/-r: ' + entry.meetups[i].lecturer + '<br>' : '';
+        if(entry.location.toLowerCase() !== entry.meetups[i].location.toLowerCase()){
+            html += entry.meetups[i].location +'<br>';
+        }
+
+        html += '<b>' + entry.meetups[i].date + ' ' + entry.meetups[i].time + '</b><br>';
         html += entry.meetups[i].lecturer ? ' Vortragende/-r: ' + entry.meetups[i].lecturer + '<br>' : '';
 
     }
