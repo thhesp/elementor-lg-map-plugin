@@ -308,17 +308,17 @@ class LgMapPlugin extends Widget_Base {
 	 * @access protected
 	 */
 	protected function _content_template() {
-				$mapboxKey = get_option( 'elementor-lg-map-plugin_settings' )['mapbox_key'];
+				$settings = get_option( 'elementor-lg-map-plugin_settings' ); $mapboxKey = $settings['mapbox_key'];
 				$mapUniqueId =  uniqid();
     		?>
-				<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; <?php echo get_option( 'elementor-lg-map-plugin_settings' )['overlay_text'] ?></p></div>
+				<div class='zoomOverlay' onclick="makeScrollable('zoomOverlay-<?php echo $mapUniqueId ?>' )" id='zoomOverlay-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'><p>&#x1F446; <?php echo $settings['overlay_text'] ?? '' ?></p></div>
 				<div id='lg-map-plugin-map-<?php echo $mapUniqueId ?>' style='width:100%; height: 500px;'></div>
 				<div class="legende-map" legend-for="lg-map-plugin-map-<?php echo $mapUniqueId; ?>"></div>
 				<script>
 					jQuery( window ).on( 'frontend/element_ready/global', () => {
 
-						<?php if('yes' === get_option( 'elementor-lg-map-plugin_settings' )['custom_focus']) { ?>
-							var map<?php echo $mapUniqueId ?> = initMapboxMapWithFokus("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>", "<?php echo get_option( 'elementor-lg-map-plugin_settings' )['focus_latitude'] ?>", "<?php echo get_option( 'elementor-lg-map-plugin_settings' )['focus_longitude'] ?>", "<?php echo get_option( 'elementor-lg-map-plugin_settings' )['focus_zoom']['size'] ?>");
+						<?php if('yes' === ($settings['custom_focus'] ?? '') ) { ?>
+							var map<?php echo $mapUniqueId ?> = initMapboxMapWithFokus("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>", "<?php echo $settings['focus_latitude'] ?>", "<?php echo $settings['focus_longitude'] ?>", "<?php echo $settings['focus_zoom']['size'] ?>");
 						<?php } else { ?>
 							var map<?php echo $mapUniqueId ?> = initMapboxMap("lg-map-plugin-map-<?php echo $mapUniqueId ?>", "<?php echo $mapboxKey ?>");
 
@@ -326,26 +326,26 @@ class LgMapPlugin extends Widget_Base {
 
 
 						<?php
-							if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_meetup'] ) {
+							if ( 'yes' === ($settings['load_meetup'] ?? '') ) {
 									echo 'initMeetups(map' .  $mapUniqueId . ');';
 							}
 						?>
 
 
 						<?php
-							if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_blockades'] ) {
+							if ( 'yes' === ($settings['load_blockades'] ?? '') ) {
 									echo 'initBlockades(map' .  $mapUniqueId . ');';
 							}
 						?>
 
 						<?php
-							if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_cells'] ) {
+							if ( 'yes' === ($settings['load_cells'] ?? '') ) {
 									echo 'initCells(map' .  $mapUniqueId . ');';
 							}
 						?>
 
 						<?php
-						if ( 'yes' === get_option( 'elementor-lg-map-plugin_settings' )['load_trainings'] ){
+						if ( 'yes' === ($settings['load_trainings'] ?? '') ){
 								echo 'initTrainings(map' .  $mapUniqueId . ');';
 						}
 					?>
