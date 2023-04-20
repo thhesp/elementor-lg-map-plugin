@@ -1,2 +1,4 @@
 nbproject/
 elementor-lg-map-plugin/assets/data/
+*.iml
+*.xml
