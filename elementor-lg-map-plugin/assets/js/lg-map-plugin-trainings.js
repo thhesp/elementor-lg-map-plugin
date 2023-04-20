@@ -31,7 +31,7 @@ async function getTrainings() {
 function buildTrainingHtml(entry){
     let hostUrl = 'https://' + window.location.host;
     let html = '<div class="map-popup">';
-    html += entry.location + ' in ' + entry.city + '<br>';
+    //html += entry.location + ' in ' + entry.city + '<br>';
     let cityUmlauts = entry.city.toLowerCase();
     cityUmlauts = cityUmlauts.replace(/\u00fc/g, "ue");
     cityUmlauts = cityUmlauts.replace(/\u00dc/g, "Ue");
