@@ -41,7 +41,7 @@ function buildMeetupHtml(entry) {
     cityUmlauts = cityUmlauts.replace(/\u00f6/g, "oe");
     cityUmlauts = cityUmlauts.replace(/\u00df/g, "ss");
 
-      html += '<a style="color:#FF4C00;" href="' + hostUrl + '/wig/' + cityUmlauts + '/">Widerstandsgruppe ' + entry.city + '</a><br>';
+    html += '<p><a style="color:#FF4C00;" href="' + hostUrl + '/wig/' + cityUmlauts + '/">Widerstandsgruppe ' + entry.city + '</a></p>';
 
     for (let i = 0; i < entry.meetups.length; i++) {
         if (i > 0) {

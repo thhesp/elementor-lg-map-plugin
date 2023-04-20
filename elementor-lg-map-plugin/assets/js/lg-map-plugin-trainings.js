@@ -29,9 +29,19 @@ async function getTrainings() {
 }
 
 function buildTrainingHtml(entry){
+    let hostUrl = 'https://' + window.location.host;
+    let html = '<div class="map-popup">';
+    html += entry.location + ' in ' + entry.city + '<br>';
+    let cityUmlauts = entry.city.toLowerCase();
+    cityUmlauts = cityUmlauts.replace(/\u00fc/g, "ue");
+    cityUmlauts = cityUmlauts.replace(/\u00dc/g, "Ue");
+    cityUmlauts = cityUmlauts.replace(/\u00c4/g, "Ae");
+    cityUmlauts = cityUmlauts.replace(/\u00e4/g, "ae");
+    cityUmlauts = cityUmlauts.replace(/\u00d6/g, "Oe");
+    cityUmlauts = cityUmlauts.replace(/\u00f6/g, "oe");
+    cityUmlauts = cityUmlauts.replace(/\u00df/g, "ss");
 
-  let html = '<div class="map-popup">';
-  html += '<h3 class="training-city">' + entry.city + '</h3>';
+    html += '<h3 class="training-city">' + entry.city + '</h3>';
 
   for(var i = 0; i < entry.trainings.length; i++){
     if(i > 0){
@@ -44,6 +54,7 @@ function buildTrainingHtml(entry){
   }
 
   html += '<p><a href="mailto:' + entry.contact + '"><i class="kontakt-email"></i></a></p>';
+  html += '<p><a style="color:#FF4C00;" href="' + hostUrl + '/wig/' + cityUmlauts + '/">Widerstandsgruppe ' + entry.city + '</a></p>';
   html +=  '</div>';
 
   return html;

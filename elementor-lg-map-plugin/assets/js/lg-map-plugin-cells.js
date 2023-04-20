@@ -35,5 +35,5 @@ function buildCellHtml(entry) {
     cityUmlauts = cityUmlauts.replace(/\u00d6/g, "Oe");
     cityUmlauts = cityUmlauts.replace(/\u00f6/g, "oe");
     cityUmlauts = cityUmlauts.replace(/\u00df/g, "ss");
-    return '<h3>' + entry.city + '</h3><a style="color:#FF4C00;" href="' + hostUrl + '/wig/' + cityUmlauts + '/">Widerstandsgruppe ' + entry.city + '</a><br><p><a href="mailto:' + entry.contact + '"><i class="kontakt-email"></i></a></p>';
+    return '<h3>' + entry.city + '</h3><p><a style="color:#FF4C00;" href="' + hostUrl + '/wig/' + cityUmlauts + '/">Widerstandsgruppe ' + entry.city + '</a></p><p><a href="mailto:' + entry.contact + '"><i class="kontakt-email"></i></a></p>';
 }
