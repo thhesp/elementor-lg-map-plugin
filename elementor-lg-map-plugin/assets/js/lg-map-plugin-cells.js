@@ -26,5 +26,14 @@ async function getCells() {
 }
 
 function buildCellHtml(entry) {
-    return '<h3>' + entry.city + '</h3><p><a href="mailto:' + entry.contact + '"><i class="kontakt-email"></i></a></p>';
+    let hostUrl = 'https://' + window.location.host;
+    let cityUmlauts = entry.city.toLowerCase();
+    cityUmlauts = cityUmlauts.replace(/\u00fc/g, "ue");
+    cityUmlauts = cityUmlauts.replace(/\u00dc/g, "Ue");
+    cityUmlauts = cityUmlauts.replace(/\u00c4/g, "Ae");
+    cityUmlauts = cityUmlauts.replace(/\u00e4/g, "ae");
+    cityUmlauts = cityUmlauts.replace(/\u00d6/g, "Oe");
+    cityUmlauts = cityUmlauts.replace(/\u00f6/g, "oe");
+    cityUmlauts = cityUmlauts.replace(/\u00df/g, "ss");
+    return '<h3>' + entry.city + '</h3><a style="color:#FF4C00;" href="' + hostUrl + '/wig/' + cityUmlauts + '/">Widerstandsgruppe ' + entry.city + '</a><br><p><a href="mailto:' + entry.contact + '"><i class="kontakt-email"></i></a></p>';
 }
