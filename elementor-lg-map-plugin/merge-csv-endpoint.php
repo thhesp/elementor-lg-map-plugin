@@ -118,7 +118,7 @@ final class MergedCSVsApi {
         $data = $this->loadMergedMeetups();
         $result = new WP_REST_Response("", 200);
 
-        $etag = md5($data); 
+        $etag = md5($data);
         // Set headers.
         $result->set_headers(array('Cache-Control' => 'max-age='.$this->getFrontendCacheDuration(), 'Etag' => $etag, 'Content-Type' => "text/csv"));
 

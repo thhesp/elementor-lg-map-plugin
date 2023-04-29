@@ -171,10 +171,14 @@ final class TrainingBackendApi {
     }
 
     function getEtag($headers) {
-        $etagOriginal = $headers['etag'][0];
+        if(array_key_exists("etag", $headers)){
+            $etagOriginal = $headers['etag'][0];
+            return str_replace("W/", "", $etagOriginal);
+        }
 
-        return str_replace("W/", "", $etagOriginal);
+        return "";
     }
+
 
     function prepareData($apikey){
         if(!get_transient("elementor-lg-map-plugin_trainings_api")) {

@@ -167,9 +167,12 @@ final class MeetupBackendApi {
     }
 
     function getEtag($headers) {
-        $etagOriginal = $headers['etag'][0];
+        if(array_key_exists("etag", $headers)){
+            $etagOriginal = $headers['etag'][0];
+            return str_replace("W/", "", $etagOriginal);
+        }
 
-        return str_replace("W/", "", $etagOriginal);
+        return "";
     }
 
     function prepareData($apikey){
