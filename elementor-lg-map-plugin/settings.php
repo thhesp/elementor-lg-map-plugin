@@ -136,6 +136,11 @@ final class MeetupSettings {
         add_settings_field( 'elementor-lg-map-plugin_trainings_url', 'Trainings URL', array($this, 'trainingsUrlRender'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_cache_duration', 'Frontend Cache Duration', array($this, 'cacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
         add_settings_field( 'elementor-lg-map-plugin_backend_cache_duration', 'Max Backend Cache Duration', array($this, 'backendCacheDuration'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+
+        add_settings_field( 'elementor-lg-map-plugin_budibase_meetups_url', 'Budibase Vorträge Url', array($this, 'budibaseMeetupsUrl'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_ethercalc_meetups_url', 'Ethercalc Vorträge Url', array($this, 'ethercalcMeetupsUrl'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_budibase_trainings_url', 'Budibase Trainings Url', array($this, 'budibaseTrainingsUrl'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
+        add_settings_field( 'elementor-lg-map-plugin_ethercalc_trainings_url', 'Ethercalc Trainings Url', array($this, 'ethercalcTrainingsUrl'), 'elementor-lg-map-plugin', 'lg_meetup_settings' );
     }
 
     function configTextRender(){
@@ -263,6 +268,28 @@ final class MeetupSettings {
                   .catch(err => alert('Failed'));
             }
         </script>";
+    }
+
+
+    function budibaseMeetupsUrl(){
+        $options = get_option( 'elementor-lg-map-plugin_settings' );
+        echo "<input id='elementor-lg-map-plugin_settings_budibase_meetups_url' name='elementor-lg-map-plugin_settings[budibase_meetups_url]' type='text' value='" . esc_attr( $options['budibase_meetups_url'] ) . "' />";
+    }
+
+    function ethercalcMeetupsUrl(){
+        $options = get_option( 'elementor-lg-map-plugin_settings' );
+        echo "<input id='elementor-lg-map-plugin_settings_ethercalc_meetups_url' name='elementor-lg-map-plugin_settings[ethercalc_meetups_url]' type='text' value='" . esc_attr( $options['ethercalc_meetups_url'] ) . "' />";
+    }
+
+
+    function budibaseTrainingsUrl(){
+        $options = get_option( 'elementor-lg-map-plugin_settings' );
+        echo "<input id='elementor-lg-map-plugin_settings_budibase_trainings_url' name='elementor-lg-map-plugin_settings[budibase_trainings_url]' type='text' value='" . esc_attr( $options['budibase_trainings_url'] ) . "' />";
+    }
+
+    function ethercalcTrainingsUrl(){
+        $options = get_option( 'elementor-lg-map-plugin_settings' );
+        echo "<input id='elementor-lg-map-plugin_settings_ethercalc_trainings_url' name='elementor-lg-map-plugin_settings[ethercalc_trainings_url]' type='text' value='" . esc_attr( $options['ethercalc_trainings_url'] ) . "' />";
     }
 
     function cacheDuration(){

@@ -21,6 +21,7 @@ require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'meetup-api.php';
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'blockades-api.php';
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'cell-api.php';
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'training-api.php';
+require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'merge-csv-endpoint.php';
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'api-management.php';
 require plugin_dir_path( ELEMENTOR_MAP_PLUGIN ) . 'settings.php';
 
