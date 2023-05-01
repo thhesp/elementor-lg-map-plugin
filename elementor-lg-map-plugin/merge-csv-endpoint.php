@@ -109,7 +109,7 @@ final class MergedCSVsApi {
         $csvUrlEthercalc = get_option( 'elementor-lg-map-plugin_settings' )['ethercalc_trainings_url'];
 
 
-        return $this->mergeCSVs($csvURLBudibase,$csvUrlEthercalc);
+        return $this->mergeCSVsForTrainingsWithSkippingColumns($csvURLBudibase,$csvUrlEthercalc);
     }
 
 
@@ -158,6 +158,43 @@ final class MergedCSVsApi {
 
         return implode($fullCSV);
     }
+
+
+    function mergeCSVsForTrainingsWithSkippingColumns($budibaseUrl, $ethercalcUrl){
+        $csvBudibase = $this->restRequestCSV($budibaseUrl);
+        $csvEthercalc = $this->restRequestCSV($ethercalcUrl);
+
+        $fullCSV;
+
+        if($csvBudibase && array_key_exists('csv', $csvBudibase)
+            && $csvEthercalc && array_key_exists('csv', $csvEthercalc)) {
+                $ethercalcArr = str_getcsv($csvEthercalc['csv'], "\n");
+                $budibaseArr = str_getcsv($csvBudibase['csv'], "\n");
+
+                unset($budibaseArr[0]);
+                $fullCSV = array_merge($ethercalcArr, $budibaseArr);
+
+                foreach($ethercalcArr as $etherCalcRows){
+                    $row = str_getcsv($etherCalcRows);
+
+                    unset($row[3]);
+                    unset($row[4]);
+
+                    echo implode(",",$row) ."\n";
+                }
+
+                foreach($budibaseArr as $row){
+                    echo $row ."\n";
+                }
+
+        } else {
+                error_log('Did not get CSV data in the response' . print_r($csvBudibase) . print_r($csvEthercalc));
+        }
+
+
+        return implode($fullCSV);
+    }
+
 
     function getFrontendCacheDuration(){
         return get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] ? get_option( 'elementor-lg-map-plugin_settings' )['cache_duration'] : 1800;

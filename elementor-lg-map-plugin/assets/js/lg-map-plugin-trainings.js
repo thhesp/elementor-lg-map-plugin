@@ -49,11 +49,9 @@ function buildTrainingHtml(entry){
     }
 
     html += '<b>' + entry.trainings[i].date + ' ' + entry.trainings[i].time + '</b><br>';
-    html += entry.trainings[i].trainer ? ' Trainer:in : ' + entry.trainings[i].trainer  + '<br>': '';
     html += 'Typ : ' + entry.trainings[i].type  + '<br>';
   }
 
-  html += '<p><a href="mailto:' + entry.contact + '"><i class="kontakt-email"></i></a></p>';
   html += '<p><a style="color:#FF4C00;" href="' + hostUrl + '/wig/' + cityUmlauts + '/">Widerstandsgruppe ' + entry.city + '</a></p>';
   html +=  '</div>';
 

@@ -210,10 +210,8 @@ final class TrainingBackendApi {
 
     function buildApiData($entry, $geocodeData){
         return array(
-                 'trainer' => trim($entry[4]),
                  'city' => trim($entry[2]),
-                 'contact' => $this->extractMail(trim($entry[3])),
-                 'type' => trim($entry[5]),
+                 'type' => trim($entry[3]),
                  'date' => trim($entry[0]),
                  'time' => trim($entry[1]),
                  'formatted_address' => $geocodeData[2],
@@ -379,7 +377,6 @@ final class TrainingBackendApi {
                          'geodata' => $row['geodata'],
                          'trainings' => array(
                                 array(
-                                 'trainer' => $row['trainer'],
                                  'date' => $row['date'],
                                  'time' => $row['time'],
                                  'type' => $row['type']
@@ -388,7 +385,6 @@ final class TrainingBackendApi {
                      );
             } else {
                 $trainingDataByLocation[$row['city']]['trainings'][] = array(
-                                         'trainer' => $row['trainer'],
                                          'date' => $row['date'],
                                          'time' => $row['time'],
                                          'type' => $row['type']
