@@ -38,9 +38,7 @@ final class ApiManagement {
         $this->apis[] = MeetupBackendApi::get_instance();
         $this->apis[] = CellBackendApi::get_instance();
         $this->apis[] = TrainingBackendApi::get_instance();
-
-        
-        MergedCSVsApi::get_instance();
+        $this->apis[] = MergedCSVsApi::get_instance();
 
         add_filter( 'cron_schedules', array ($this, 'lg_map_plugin_cron_schedule') );
         $this->scheduleCronIfNecessary();
